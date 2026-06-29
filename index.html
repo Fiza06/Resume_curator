@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JD → Tailored Resume + Cover Letter</title>
+<style>
+  :root{
+    --navy:#1F4E79; --navy2:#2E6CA4; --ink:#16202b; --muted:#5b6770;
+    --line:#dbe2ea; --bg:#f4f6f9; --card:#ffffff; --soft:#eef3f8;
+    --green:#1d7a46; --greenbg:#e7f4ec; --amber:#8a5a00; --amberbg:#fdf2dc;
+    --blue:#1f5fa6; --bluebg:#e6effa; --red:#b3261e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
+  .wrap{max-width:920px;margin:0 auto;padding:22px 18px 70px}
+  h1{font-size:21px;margin:0 0 2px;color:var(--navy)}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 8px}
+  .banner{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--navy);margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  label{display:block;font-weight:600;font-size:13px;margin:0 0 6px;color:var(--ink)}
+  .hint{font-weight:400;color:var(--muted);font-size:12px}
+  textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;
+    font-family:inherit;font-size:14px;color:var(--ink);background:#fff;resize:vertical}
+  textarea{min-height:96px}textarea.tall{min-height:150px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:200px}
+  .opts{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
+  .chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
+  .chk input{width:17px;height:17px;accent-color:var(--navy)}
+  .btnrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
+  button{font-family:inherit;font-size:14px;font-weight:600;border-radius:9px;cursor:pointer;border:1px solid transparent;padding:11px 18px}
+  .primary{background:var(--navy);color:#fff}.primary:hover{background:var(--navy2)}
+  .primary:disabled{background:#9fb3c6;cursor:not-allowed}
+  .ghost{background:#fff;color:var(--navy);border-color:var(--line)}.ghost:hover{background:var(--soft)}
+  .approve{background:var(--green);color:#fff}.approve:hover{filter:brightness(1.07)}
+  .mini{padding:6px 11px;font-size:12.5px;font-weight:600}
+  .uploadbtn{display:inline-block;background:#fff;color:var(--navy);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:12.5px;font-weight:600;cursor:pointer}
+  .uploadbtn:hover{background:var(--soft)}
+  .out{white-space:pre-wrap;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;
+    background:#fbfcfe;border:1px solid var(--line);border-radius:9px;padding:14px;color:var(--ink);max-height:520px;overflow:auto}
+  .outhead{display:flex;justify-content:space-between;align-items:center;margin:0 0 8px}
+  .outhead h2{font-size:15px;margin:0;color:var(--navy)}
+  .tag{font-size:11px;font-weight:600;color:var(--muted);background:var(--soft);border-radius:20px;padding:3px 9px}
+  .changes{background:var(--amberbg);border:1px solid #f0dcb4;border-radius:9px;padding:12px 14px;white-space:pre-wrap;font-size:13px;color:#4a3a1a}
+  .status{font-size:13px;color:var(--muted);margin-left:4px}
+  .err{color:var(--red);font-size:13.5px;margin-top:8px}
+  .spinner{width:15px;height:15px;border:2px solid #c9d6e2;border-top-color:var(--navy);border-radius:50%;
+    display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hidden{display:none}.saved{color:var(--green);font-size:12.5px}
+  .meterwrap{display:flex;align-items:center;gap:14px;margin:4px 0 14px}
+  .scorebig{font-size:30px;font-weight:800;color:var(--navy);min-width:74px}
+  .meterbar{flex:1}
+  .track{height:12px;background:#e9eef4;border-radius:20px;overflow:hidden}
+  .fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#2E6CA4,#3f9d63);transition:width .6s}
+  .metersub{font-size:12.5px;color:var(--muted);margin-top:5px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 2px}
+  .chip{font-size:12.5px;font-weight:600;border-radius:20px;padding:4px 11px;border:1px solid transparent}
+  .c-match{background:var(--greenbg);color:var(--green);border-color:#bfe3cd}
+  .c-partial{background:var(--bluebg);color:var(--blue);border-color:#c4d6f2}
+  .c-miss{background:var(--amberbg);color:var(--amber);border-color:#f0dcb4}
+  .grouplab{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px}
+  .gain{border-left:3px solid var(--navy);padding:7px 0 7px 12px;margin:8px 0;font-size:13.5px}
+  .gain b{color:var(--navy)}
+  .approvebar{background:var(--soft);border:1px dashed var(--navy2);border-radius:10px;padding:13px 15px;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>JD → Tailored Resume + Cover Letter</h1>
+  <p class="sub">Running on your own OpenAI key · model: gpt-4o-mini (configurable).</p>
+  <div class="banner"><b>What it does:</b> reorders and re-emphasizes what's already in your résumé to match the JD, and lightly mirrors the JD's wording where it stays true. It never invents skills, tools, or metrics — genuine gaps are surfaced, not hidden.</div>
+
+  <div class="card">
+    <label for="apiKey">OpenAI API key <span class="hint">(leave blank if the host provides one)</span></label>
+    <input type="password" id="apiKey" placeholder="sk-...">
+    <div class="hint" style="margin-top:6px">Get one at platform.openai.com/api-keys. It's sent only to this app's server to call the model, and is never stored there — it stays in your browser.</div>
+  </div>
+
+  <div class="card">
+    <label>Master résumé <span class="hint">(pre-loaded — edit anytime, then Save as default)</span></label>
+    <textarea id="resume" class="tall"></textarea>
+    <div class="btnrow">
+      <label class="uploadbtn">Upload PDF / TXT<input type="file" id="resumeFile" accept=".pdf,.txt" hidden></label>
+      <button class="ghost mini" id="saveBtn">Save as default</button>
+      <button class="ghost mini" id="resetBtn">Reset to original</button>
+      <span class="status" id="resumeFileStatus"></span>
+      <span class="saved hidden" id="savedMsg">Saved ✓</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <label for="jd">Job description</label>
+    <textarea id="jd" class="tall" placeholder="Paste the full JD here..."></textarea>
+    <div class="btnrow">
+      <label class="uploadbtn">Upload PDF / TXT<input type="file" id="jdFile" accept=".pdf,.txt" hidden></label>
+      <span class="status" id="jdFileStatus"></span>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div><label for="company">Company <span class="hint">(optional)</span></label><input type="text" id="company" placeholder="e.g. Sarvam AI"></div>
+      <div><label for="role">Role title <span class="hint">(optional)</span></label><input type="text" id="role" placeholder="e.g. Product Manager"></div>
+    </div>
+    <div style="margin-top:12px">
+      <label for="comments">Comments / instructions <span class="hint">(optional)</span></label>
+      <textarea id="comments" placeholder="e.g. Move the leadership project up. Emphasize cross-functional collaboration. Mirror their 'stakeholder alignment' wording where true."></textarea>
+    </div>
+    <div class="opts"><span class="chk"><input type="checkbox" id="wantCover"> <label for="wantCover" style="margin:0">Also write a cover letter (after you approve)</label></span></div>
+    <div class="btnrow" style="margin-top:14px">
+      <button class="primary" id="goBtn">Analyze &amp; generate</button>
+      <span class="status" id="status"></span>
+    </div>
+    <div class="err hidden" id="err"></div>
+  </div>
+
+  <div class="card hidden" id="skillCard">
+    <div class="outhead"><h2>Skill alignment</h2><span class="tag">based on the JD</span></div>
+    <div class="meterwrap">
+      <div class="scorebig" id="scoreBig">0%</div>
+      <div class="meterbar"><div class="track"><div class="fill" id="fill" style="width:0%"></div></div>
+        <div class="metersub" id="meterSub"></div></div>
+    </div>
+    <div id="matchGroup"><div class="grouplab">You match</div><div class="chips" id="matchChips"></div></div>
+    <div id="partialGroup"><div class="grouplab">Partial / transferable</div><div class="chips" id="partialChips"></div></div>
+    <div id="missGroup"><div class="grouplab">Missing — add if you have it, else prepare</div><div class="chips" id="missChips"></div></div>
+    <div id="gainGroup" style="margin-top:10px"><div class="grouplab">Skills to gain &amp; how to prep</div><div id="gainList"></div></div>
+  </div>
+
+  <div class="card hidden" id="resumeCard">
+    <div class="outhead"><h2>Tailored résumé</h2><button class="ghost mini" data-copy="resumeOut">Copy</button></div>
+    <div class="out" id="resumeOut"></div>
+    <div style="margin-top:12px" id="changesWrap" class="hidden">
+      <label>Summary of modifications</label>
+      <div class="changes" id="changesOut"></div>
+    </div>
+    <div class="approvebar" id="approveBar">
+      <div style="font-weight:600;margin-bottom:8px">Does this look right?</div>
+      <div class="btnrow" style="margin-top:0">
+        <button class="approve" id="approveBtn">Approve ✓</button>
+        <button class="ghost" id="reviseBtn">Request changes</button>
+        <span class="status" id="approveStatus"></span>
+      </div>
+      <div class="hidden" id="reviseWrap" style="margin-top:12px">
+        <label for="revise">What should change? <span class="hint">(added to your instructions, then regenerates)</span></label>
+        <textarea id="revise" placeholder="e.g. Don't reword the leadership bullet. Push the product launch higher. Drop the internship line for this one."></textarea>
+        <div class="btnrow"><button class="primary mini" id="regenBtn">Regenerate</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="coverCard">
+    <div class="outhead"><h2>Cover letter</h2><button class="ghost mini" data-copy="coverOut">Copy</button></div>
+    <div class="out" id="coverOut"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+}
+const DEFAULT_RESUME = `Fiza Parveen
+Machine Learning Engineer · Generative AI · Agentic Systems · Responsible AI
+Noida, India | fiza.parveen06@gmail.com | +91 9009769402 | linkedin.com/in/fiza-parveen | github.com/Fiza06
+
+SUMMARY
+Machine Learning Engineer with 2.5+ years building and evaluating production GenAI and agentic systems, with a rare focus on LLM evaluation, Responsible AI, and adversarial red-teaming. Currently contribute to the development of Talent Navigator, an enterprise agentic AI platform, and lead the Responsible-AI work that improves its reliability and safety. Background spans agentic RAG, RLHF, deep learning, and EEG research (3 peer-reviewed papers), with strong Python, PyTorch, and LangChain/LangGraph for research-to-production pipelines.
+
+Core Skills: LLM Evaluation · Responsible AI (TrustLLM) · Prompt-Injection Red-Teaming (IPI/BIPIA) · Agentic Frameworks (LangGraph, LangChain) · RAG Systems · RLHF · Guardrails · Generative AI · Computer Vision · NLP · Time-Series · EEG
+
+EXPERIENCE
+HCLTech — Tech Lead, AI/ML | Oct 2023 – Present, Noida
+• Talent Navigator (Enterprise Agentic AI): Contribute to the development of an enterprise agentic talent platform, and improve its reliability and performance through Responsible-AI validation and hardening of agent behaviour.
+• LLM Evaluation & Responsible AI: Designed functional and responsible-AI evaluation for agentic systems across TrustLLM dimensions (truthfulness, safety, robustness, fairness); built an indirect prompt-injection (IPI) red-teaming pipeline using BIPIA and Gray Swan strategies (400+ adversarial prompts across 19 strategies); standardized quality assessment with DeepEval and metrics such as RtA, Micro-F1, and Correct Rate.
+• Enterprise RAG & Agentic Assistant: Built a LangChain + FAISS + OpenAI retrieval assistant that cut lookup time by 80%, extended into an agentic setup with tool use (LangGraph).
+• Camera Parameter Optimization (LLM + RLHF): Designed a GPT-driven loop for ISO, aperture, and shutter, with RLHF aligning outputs to user preferences via periodic retraining; achieved 90% user acceptance.
+• Predictive Maintenance (Transformer + Time-Series): Developed transformer-based temporal models for multi-sensor anomaly prediction and real-time fault detection.
+• Audio–Video Event Detection (ONNX + OpenCV): Built real-time beep and fluid-level detection for medical devices; improved signal reliability by 35%.
+• Signature Authentication (CNN–Attention): Deployed a CNN–Attention model with 93% accuracy on forged vs. genuine samples.
+• Supported team hiring by shortlisting and conducting technical interviews.
+
+IIT Mandi — Research Assistant (M.S. by Research) | Feb 2021 – Oct 2023
+• Developed a CNN–Transformer for EEG mental-workload classification with 85% accuracy.
+• Applied wavelet-based feature ensembles and identified key EEG channels driving workload prediction.
+• Published 3 peer-reviewed papers (PETRA, BIOSTEC) with models outperforming SOTA baselines.
+
+EDUCATION
+M.S. (by Research) in Machine Learning, IIT Mandi — CGPA 7.5
+B.E. in Electrical Engineering, Govt. Engineering College, Bilaspur — CGPA 8.37
+
+PUBLICATIONS
+Parveen, F. & Bhavsar, A., "Attention-based 1D-CNN for Mental Workload Classification," PETRA 2023.
+"Wavelet-based Feature Ensemble for Mental Workload Classification," BIOSTEC 2024.
+"Unified CNN–Transformer Model for EEG Workload," BIOSTEC 2025.
+
+TECHNICAL SKILLS
+Languages: Python, SQL
+Frameworks/Libraries: PyTorch, TensorFlow, scikit-learn, Hugging Face, LangChain, LangGraph, FastAPI, Flask, DeepEval
+Data/Vector DBs: NumPy, Pandas, Matplotlib, Seaborn, FAISS, ChromaDB, Pinecone
+Tools/Cloud: Git, Docker, ONNX, Streamlit, AWS (Basic), Microsoft Fabric
+Concepts: RLHF, Transformers, RAG, Agentic Workflows, LLM Evaluation, Responsible AI (TrustLLM), Indirect Prompt Injection (IPI/BIPIA), Red-Teaming, Guardrails, Attention, ONNX Inference`;
+
+const $ = id => document.getElementById(id);
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const resumeBox = $("resume");
+
+// Local persistence (normal browser -> localStorage is correct here)
+(function(){ let v=DEFAULT_RESUME;
+  try{ const s=localStorage.getItem("master_resume"); if(s) v=s; }catch(e){}
+  resumeBox.value=v; })();
+
+$("saveBtn").onclick = () => { try{ localStorage.setItem("master_resume",resumeBox.value);
+  const m=$("savedMsg"); m.classList.remove("hidden"); setTimeout(()=>m.classList.add("hidden"),1500);
+  }catch(e){ alert("Couldn't save locally."); } };
+$("resetBtn").onclick = () => { resumeBox.value=DEFAULT_RESUME; try{ localStorage.removeItem("master_resume"); }catch(e){} };
+
+// Remember the user's own key locally (their browser only)
+(function(){ try{ const k=localStorage.getItem("user_api_key"); if(k) $("apiKey").value=k; }catch(e){}
+  $("apiKey").addEventListener("change",()=>{ try{ localStorage.setItem("user_api_key",$("apiKey").value.trim()); }catch(e){} }); })();
+
+// ---- File upload: PDF (via pdf.js) or plain text -> fills the textarea ----------
+async function extractPdfText(file){
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let text = "";
+  for(let i=1; i<=pdf.numPages; i++){
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    // group items into lines by their vertical position for cleaner output
+    let lastY=null, line="";
+    const lines=[];
+    for(const it of content.items){
+      const y = it.transform[5];
+      if(lastY!==null && Math.abs(y-lastY)>3){ lines.push(line.trim()); line=""; }
+      line += it.str + " "; lastY = y;
+    }
+    if(line.trim()) lines.push(line.trim());
+    text += lines.join("\n") + "\n";
+  }
+  return text.trim();
+}
+
+function wireUpload(inputId, targetId, statusId){
+  const input=$(inputId); if(!input) return;
+  input.addEventListener("change", async (e)=>{
+    const f=e.target.files[0]; if(!f) return;
+    const st=$(statusId);
+    const isPdf = f.type==="application/pdf" || f.name.toLowerCase().endsWith(".pdf");
+    st.innerHTML='<span class="spinner"></span> Reading '+(isPdf?"PDF":"file")+'…';
+    try{
+      let t="";
+      if(isPdf){
+        if(!window.pdfjsLib) throw new Error("pdf library not loaded");
+        t = await extractPdfText(f);
+      } else {
+        t = await f.text();
+      }
+      $(targetId).value = t;
+      st.textContent = t ? "Loaded ✓ — review / edit the text below" : "No text found (a scanned image PDF can't be read here)";
+    }catch(err){
+      st.textContent = "Couldn't read that file — paste the text instead.";
+    }
+    input.value=""; // allow re-uploading the same file
+  });
+}
+wireUpload("resumeFile","resume","resumeFileStatus");
+wireUpload("jdFile","jd","jdFileStatus");
+
+document.querySelectorAll("[data-copy]").forEach(b=>{ b.onclick=()=>{ const t=$(b.dataset.copy).textContent;
+  navigator.clipboard.writeText(t).then(()=>{ const o=b.textContent; b.textContent="Copied ✓"; setTimeout(()=>b.textContent=o,1200); }); }; });
+
+async function api(path, payload){
+  const headers={"Content-Type":"application/json"};
+  const k=($("apiKey")&&$("apiKey").value.trim())||"";
+  if(k) headers["X-User-Key"]=k;
+  const r = await fetch(path,{method:"POST",headers,body:JSON.stringify(payload)});
+  const j = await r.json();
+  if(!r.ok || j.error) throw new Error(j.error || ("server "+r.status));
+  return j;
+}
+
+function renderSkills(a){
+  const score=Math.max(0,Math.min(100,a.score||0));
+  $("scoreBig").textContent=score+"%";
+  $("fill").style.width=score+"%";
+  const req=(a.required||[]).length, m=(a.matched||[]).length;
+  $("meterSub").textContent=`${m} of ${req} key requirements clearly matched`+((a.partial&&a.partial.length)?`, ${a.partial.length} partial`:"")+".";
+  const fill=(id,arr,cls)=>{ const el=$(id); el.innerHTML=(arr&&arr.length)?arr.map(s=>`<span class="chip ${cls}">${esc(s)}</span>`).join(""):'<span class="hint">—</span>'; };
+  fill("matchChips",a.matched,"c-match");
+  fill("partialChips",a.partial,"c-partial");
+  fill("missChips",a.missing,"c-miss");
+  $("partialGroup").style.display=(a.partial&&a.partial.length)?"":"none";
+  const g=$("gainList");
+  if(a.to_gain&&a.to_gain.length){ g.innerHTML=a.to_gain.map(x=>`<div class="gain"><b>${esc(x.skill)}</b> — ${esc(x.how)}</div>`).join(""); $("gainGroup").style.display=""; }
+  else { g.innerHTML=''; $("gainGroup").style.display="none"; }
+  $("skillCard").classList.remove("hidden");
+}
+
+let lastInputs=null;
+
+async function runGenerate(extraNotes){
+  const jd=$("jd").value.trim(), resume=resumeBox.value.trim();
+  let comments=$("comments").value.trim();
+  if(extraNotes) comments=(comments?comments+"\n":"")+extraNotes;
+  $("err").classList.add("hidden");
+  if(!jd){ $("err").textContent="Paste a job description first."; $("err").classList.remove("hidden"); return; }
+  lastInputs={jd,resume,comments};
+  const btn=$("goBtn"); btn.disabled=true; const status=$("status");
+  ["skillCard","resumeCard","coverCard","changesWrap","reviseWrap"].forEach(i=>$(i).classList.add("hidden"));
+  $("approveStatus").textContent="";
+  try{
+    status.innerHTML='<span class="spinner"></span> Analyzing skill fit…';
+    try{ const a=await api("/api/analyze",{jd,resume}); if(!a.error) renderSkills(a); }catch(e){}
+
+    status.innerHTML='<span class="spinner"></span> Tailoring résumé…';
+    const t=await api("/api/tailor",{jd,resume,comments});
+    $("resumeOut").textContent=t.resume; $("resumeCard").classList.remove("hidden");
+    if(t.changes){ $("changesOut").textContent=t.changes; $("changesWrap").classList.remove("hidden"); }
+    status.textContent="Review below ↓";
+  }catch(e){ $("err").textContent="Something went wrong ("+e.message+"). Is the server running, and is your API key set?"; $("err").classList.remove("hidden"); status.textContent=""; }
+  finally{ btn.disabled=false; }
+}
+
+$("goBtn").onclick=()=>runGenerate(null);
+$("reviseBtn").onclick=()=>$("reviseWrap").classList.toggle("hidden");
+$("regenBtn").onclick=()=>{ const n=$("revise").value.trim(); $("revise").value=""; runGenerate(n||null); };
+
+$("approveBtn").onclick=async()=>{
+  $("reviseWrap").classList.add("hidden");
+  if(!$("wantCover").checked){ $("approveStatus").textContent='Approved ✓ — résumé ready to use.'; return; }
+  const btn=$("approveBtn"); btn.disabled=true;
+  $("approveStatus").innerHTML='<span class="spinner"></span> Writing cover letter…';
+  try{
+    const resume=$("resumeOut").textContent||lastInputs.resume;
+    const company=$("company").value.trim(), role=$("role").value.trim();
+    const c=await api("/api/cover",{jd:lastInputs.jd,resume,company,role,comments:lastInputs.comments});
+    $("coverOut").textContent=c.letter; $("coverCard").classList.remove("hidden");
+    $("approveStatus").textContent="Approved ✓ — cover letter below.";
+  }catch(e){ $("approveStatus").textContent="Approved, but cover letter failed ("+e.message+")."; }
+  finally{ btn.disabled=false; }
+};
+</script>
+</body>
+</html>
