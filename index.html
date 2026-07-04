@@ -3,333 +3,706 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JD → Tailored Resume + Cover Letter</title>
+<title>Resume→Fit — Know your resume fit in 60 seconds</title>
+<meta name="description" content="Paste a job description and your resume. Get an instant fit score, ranked gaps, AI-rewritten bullets, and a polished PDF — all in one focused workspace.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root{
-    --navy:#21436f; --navy2:#315f9f; --ink:#172033; --muted:#667085;
-    --line:#d9e3ef; --bg:#f6f8fc; --card:#ffffff; --soft:#eef6ff;
-    --green:#18745b; --greenbg:#e8f7ef; --amber:#91610a; --amberbg:#fff3da;
-    --blue:#2764bd; --bluebg:#eaf2ff; --red:#b3261e; --teal:#0f766e;
-    --coral:#e56f51; --lilac:#6d5bd0;
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+  /* Tabs */
+  .tabbtn {
+    padding: 0.375rem 0.875rem;
+    border-radius: 0.375rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #999999;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-    background:
-      linear-gradient(180deg,#f8fbff 0,#f6f8fc 42%,#f8fafc 100%);
-    color:var(--ink);line-height:1.5;font-size:15px}
-  .wrap{max-width:1040px;margin:0 auto;padding:22px 18px 70px}
-  h1{font-size:21px;margin:0 0 2px;color:var(--navy)}
-  .sub{color:var(--muted);font-size:13px;margin:0 0 8px}
-  .banner{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:12.5px;color:var(--navy);margin-bottom:16px}
-  .card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 12px 30px rgba(33,67,111,.05)}
-  label{display:block;font-weight:600;font-size:13px;margin:0 0 6px;color:var(--ink)}
-  .hint{font-weight:400;color:var(--muted);font-size:12px}
-  textarea,input[type=text],input[type=email],input[type=password]{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;
-    font-family:inherit;font-size:14px;color:var(--ink);background:#fff;resize:vertical}
-  textarea{min-height:96px}textarea.tall{min-height:150px}
-  .row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:200px}
-  .opts{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
-  .chk{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
-  .chk input{width:17px;height:17px;accent-color:var(--navy)}
-  .btnrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
-  button{font-family:inherit;font-size:14px;font-weight:600;border-radius:9px;cursor:pointer;border:1px solid transparent;padding:11px 18px}
-  .primary{background:var(--navy);color:#fff}.primary:hover{background:var(--navy2)}
-  .primary:disabled{background:#9fb3c6;cursor:not-allowed}
-  .ghost{background:#fff;color:var(--navy);border-color:var(--line)}.ghost:hover{background:var(--soft)}
-  .approve{background:var(--green);color:#fff}.approve:hover{filter:brightness(1.07)}
-  .mini{padding:6px 11px;font-size:12.5px;font-weight:600}
-  .uploadbtn{display:inline-block;background:#fff;color:var(--navy);border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:12.5px;font-weight:600;cursor:pointer}
-  .uploadbtn:hover{background:var(--soft)}
-  .out{white-space:pre-wrap;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:13px;
-    background:#fbfcfe;border:1px solid var(--line);border-radius:9px;padding:14px;color:var(--ink);max-height:520px;overflow:auto}
-  .outhead{display:flex;justify-content:space-between;align-items:center;margin:0 0 8px}
-  .outhead h2{font-size:15px;margin:0;color:var(--navy)}
-  .tag{font-size:11px;font-weight:600;color:var(--muted);background:var(--soft);border-radius:20px;padding:3px 9px}
-  .changes{background:var(--amberbg);border:1px solid #f0dcb4;border-radius:9px;padding:12px 14px;white-space:pre-wrap;font-size:13px;color:#4a3a1a}
-  .status{font-size:13px;color:var(--muted);margin-left:4px}
-  .err{color:var(--red);font-size:13.5px;margin-top:8px}
-  .spinner{width:15px;height:15px;border:2px solid #c9d6e2;border-top-color:var(--navy);border-radius:50%;
-    display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .hidden{display:none}.saved{color:var(--green);font-size:12.5px}
-  .meterwrap{display:flex;align-items:center;gap:14px;margin:4px 0 14px}
-  .scorebig{font-size:30px;font-weight:800;color:var(--navy);min-width:74px}
-  .meterbar{flex:1}
-  .track{height:12px;background:#e9eef4;border-radius:20px;overflow:hidden}
-  .fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#2E6CA4,#3f9d63);transition:width .6s}
-  .metersub{font-size:12.5px;color:var(--muted);margin-top:5px}
-  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 2px}
-  .chip{font-size:12.5px;font-weight:600;border-radius:20px;padding:4px 11px;border:1px solid transparent}
-  .c-match{background:var(--greenbg);color:var(--green);border-color:#bfe3cd}
-  .c-partial{background:var(--bluebg);color:var(--blue);border-color:#c4d6f2}
-  .c-miss{background:var(--amberbg);color:var(--amber);border-color:#f0dcb4}
-  .grouplab{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px}
-  .gain{border-left:3px solid var(--navy);padding:7px 0 7px 12px;margin:8px 0;font-size:13.5px}
-  .gain b{color:var(--navy)}
-  .approvebar{background:var(--soft);border:1px dashed var(--navy2);border-radius:10px;padding:13px 15px;margin-top:6px}
-  .billingtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-  .planrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
-  .plan{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff}
-  .plan.active{border-color:#bfe3cd;background:var(--greenbg)}
-  .plan h3{font-size:14px;margin:0 0 2px;color:var(--ink)}
-  .plan .price{font-weight:800;color:var(--navy);font-size:18px;margin:2px 0 5px}
-  .plan p{font-size:12.5px;color:var(--muted);margin:0 0 8px}
-  .plan ul{margin:0;padding-left:17px;color:var(--ink);font-size:12.5px}
-  .pill{font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;background:var(--greenbg);color:var(--green);border:1px solid #bfe3cd}
-  .authbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-  .authform{display:grid;grid-template-columns:1fr 1fr auto auto;gap:10px;align-items:end;margin-top:12px}
-  .historylist{display:grid;gap:8px;margin-top:10px}
-  .historyitem{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-  .historyitem b{font-size:13px;color:var(--ink)}
-  .historymeta{font-size:12px;color:var(--muted);margin-top:2px}
-  .templategrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:10px}
-  .templatecard{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:142px}
-  .templatecard h3{font-size:14px;margin:0;color:var(--ink)}
-  .templatecard p{font-size:12.5px;color:var(--muted);margin:0;flex:1}
-  .templatechip{width:100%;height:30px;border-radius:6px;background:linear-gradient(90deg,#1F4E79 0 26%,#eef3f8 26%);border:1px solid var(--line)}
-  .templatecard[data-template="modern"] .templatechip{background:linear-gradient(90deg,#0F766E 0 100%);opacity:.75}
-  .templatecard[data-template="technical"] .templatechip{background:repeating-linear-gradient(90deg,#334155 0 8px,#eef3f8 8px 16px)}
-  .templatecard[data-template="academic"] .templatechip{background:linear-gradient(180deg,#7C2D12 0 28%,#fff 28%)}
-  .templatecard[data-template="executive"] .templatechip{background:linear-gradient(135deg,#4338CA 0 45%,#eef3f8 45%)}
-  .sitebar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:24px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);letter-spacing:0}
-  .brandmark{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--navy),var(--teal));display:grid;place-items:center;color:#fff;font-weight:900}
-  .navlinks{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}
-  .landing{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(320px,.86fr);gap:28px;align-items:center;min-height:calc(100vh - 150px)}
-  .hero h1{font-size:44px;line-height:1.05;margin:0 0 14px;color:var(--ink);max-width:720px}
-  .hero p{font-size:17px;color:var(--muted);margin:0 0 22px;max-width:620px}
-  .heroAccent{color:var(--teal)}
-  .heroStats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:620px}
-  .heroStat{border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px}
-  .heroStat b{display:block;font-size:18px;color:var(--navy)}
-  .heroStat span{font-size:12px;color:var(--muted)}
-  .productPreview{border:1px solid var(--line);border-radius:10px;background:#fff;padding:14px;box-shadow:0 20px 50px rgba(33,67,111,.10);margin-top:18px;max-width:620px}
-  .previewTop{display:flex;gap:6px;margin-bottom:12px}.previewTop span{width:8px;height:8px;border-radius:50%;background:var(--coral)}.previewTop span:nth-child(2){background:#f0b429}.previewTop span:nth-child(3){background:var(--teal)}
-  .previewRow{height:10px;border-radius:999px;background:#e6edf7;margin:8px 0}.previewRow.wide{width:86%}.previewRow.mid{width:66%}.previewRow.short{width:42%}
-  .previewSplit{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-  .previewPanel{border:1px solid #e5edf7;border-radius:8px;padding:10px;background:#fbfdff}
-  .authShell .card{margin:0}
-  .authShell{align-self:stretch;display:flex;align-items:center}
-  .authShell .authform{grid-template-columns:1fr}
-  .authShell .authform button{width:100%}
-  .oauthDivider{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--muted);font-size:12px}
-  .oauthDivider:before,.oauthDivider:after{content:"";height:1px;background:var(--line);flex:1}
-  .googlebtn{width:100%;display:flex;justify-content:center;align-items:center;gap:9px;background:#fff;color:#253044;border-color:var(--line)}
-  .googleIcon{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#4285f4;border:1px solid #e5e7eb;font-size:12px}
-  .appHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
-  .appHeader h1{font-size:26px;color:var(--ink)}
-  .appHeader .sub{margin-bottom:0}
-  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-  .tabbtn{background:#fff;color:var(--muted);border-color:var(--line);padding:9px 13px;border-radius:8px}
-  .tabbtn.active{color:#fff;background:var(--navy);border-color:var(--navy)}
-  body[data-tab="tailor"] .tab-results,
-  body[data-tab="tailor"] .tab-saved,
-  body[data-tab="tailor"] .tab-settings,
-  body[data-tab="results"] .tab-tailor,
-  body[data-tab="results"] .tab-saved,
-  body[data-tab="results"] .tab-settings,
-  body[data-tab="saved"] .tab-tailor,
-  body[data-tab="saved"] .tab-results,
-  body[data-tab="saved"] .tab-settings,
-  body[data-tab="settings"] .tab-tailor,
-  body[data-tab="settings"] .tab-results,
-  body[data-tab="settings"] .tab-saved{display:none}
-  body:not(.signed-in) .appOnly{display:none}
-  body.signed-in #landingPage{display:none}
-  body.signed-in .sitebar{margin-bottom:14px}
-  body.signed-in .authOnly{display:none}
-  #authCard{border-color:#cbdff4}
-  #authCard .authbar label{font-size:18px;color:var(--ink)}
-  #authCard .authbar .hint{font-size:13px}
-  @media(max-width:720px){.authform{grid-template-columns:1fr}.historyitem{display:block}.historyitem .btnrow{margin-top:8px}}
-  @media(max-width:860px){.landing{grid-template-columns:1fr;min-height:auto}.hero h1{font-size:34px}.heroStats{grid-template-columns:1fr}.authShell{display:block}}
+  .tabbtn:hover { color: #e0e0e0; background-color: #2d2d2d; }
+  .tabbtn.active { color: #14b8a6; background-color: rgba(20, 184, 166, 0.1); }
+
+  /* Accordion */
+  .acc-item .acc-body { display: none; }
+  .acc-item.is-open .acc-body { display: block; }
+  .acc-chevron { transition: transform 0.2s; }
+  .acc-item.is-open .acc-chevron { transform: rotate(180deg); }
+
+  /* Toast */
+  #toast {
+    transform: translateX(-50%) translateY(80px);
+    opacity: 0;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+  }
+  #toast.is-visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Mobile sticky apply bar: only on small screens, only once results exist */
+  #mobileStickyBar { display: none; }
+  html, body { overflow-x: hidden; }
+  @media (max-width: 767px) {
+    body[data-has-results="true"] #mobileStickyBar { display: flex; }
+    #inputPanel { width: 100% !important; }
+    .tab-analyze { flex-direction: column; }
+    #appView .max-w-\[1400px\] { padding-bottom: 88px; }
+    #progressStepsWrap { display: none; }
+    header { padding-left: 1rem !important; padding-right: 1rem !important; }
+  }
+
+  textarea:focus, input:focus { outline: none; }
 </style>
 </head>
-<body>
-<div class="wrap">
-  <div class="sitebar">
-    <div class="brand"><div class="brandmark">R</div><span>Resume Tailor</span></div>
-    <div class="navlinks"><span class="authOnly">Free beta</span><button class="ghost mini hidden" id="logoutBtn">Sign out</button></div>
-  </div>
+<body class="bg-[#1a1a1a] text-[#e0e0e0]">
 
-  <section class="landing" id="landingPage">
-    <div class="hero">
-      <h1>Turn raw experience into a <span class="heroAccent">job-ready resume</span>.</h1>
-      <p>Tailor your resume to a job description, understand the gaps, save versions, and export polished PDFs from one focused workspace.</p>
-      <div class="heroStats">
-        <div class="heroStat"><b>5</b><span>PDF layouts</span></div>
-        <div class="heroStat"><b>ATS</b><span>plain-text first output</span></div>
-        <div class="heroStat"><b>Private</b><span>saved under your login</span></div>
+<!-- ============================================================ -->
+<!-- AUTH VIEW                                                     -->
+<!-- ============================================================ -->
+<div id="authView" class="hidden min-h-screen bg-[#1a1a1a] relative overflow-hidden">
+  <div class="size-[450px] flex absolute flex-col top-[279.25px] right-[172.797px] bg-[#14b8a61a] blur-[120px] rounded-full"></div>
+
+  <div class="relative flex min-h-screen w-full flex-col lg:flex-row">
+    <!-- Left marketing column -->
+    <div class="flex w-full lg:w-1/2 flex-col justify-center px-8 py-16 lg:px-20">
+      <div class="flex h-fit flex-col gap-4">
+        <div class="flex items-center text-white text-[32px] font-extrabold tracking-[-0.4px] gap-1">
+          <div class="text-white font-['Inter'] text-[32px] font-extrabold leading-normal tracking-[-0.8px]">Resume</div>
+          <div class="text-[#14b8a6] font-['Inter'] text-[32px] font-extrabold leading-normal tracking-[-0.8px]">&rarr;</div>
+          <div class="text-white font-['Inter'] text-[32px] font-extrabold leading-normal tracking-[-0.8px]">Fit</div>
+        </div>
+        <div class="text-[#999999] font-['Inter'] text-lg leading-relaxed">Match your resume to any job in seconds.</div>
       </div>
-      <div class="productPreview" aria-hidden="true">
-        <div class="previewTop"><span></span><span></span><span></span></div>
-        <div class="previewRow wide"></div>
-        <div class="previewRow mid"></div>
-        <div class="previewSplit">
-          <div class="previewPanel">
-            <div class="previewRow wide"></div>
-            <div class="previewRow mid"></div>
-            <div class="previewRow short"></div>
+
+      <div class="flex h-fit flex-col mt-3 mb-0 mx-0 gap-7">
+        <div class="flex h-fit items-center gap-4">
+          <div class="size-10 flex shrink-0 justify-center items-center bg-[#14b8a61a] rounded-lg">
+            <div class="size-5 flex flex-col text-[#14b8a6]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
           </div>
-          <div class="previewPanel">
-            <div class="previewRow short"></div>
-            <div class="previewRow wide"></div>
-            <div class="previewRow mid"></div>
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-medium">Get a 0&ndash;100 fit score instantly</div>
+        </div>
+        <div class="flex h-fit items-center gap-4">
+          <div class="size-10 flex shrink-0 justify-center items-center bg-[#14b8a61a] rounded-lg">
+            <div class="size-[18px] flex flex-col text-[#14b8a6]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
           </div>
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-medium">See the gaps that matter, ranked by priority</div>
+        </div>
+        <div class="flex h-fit items-center gap-4">
+          <div class="size-10 flex shrink-0 justify-center items-center bg-[#14b8a61a] rounded-lg">
+            <div class="size-5 flex flex-col text-[#14b8a6]">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-medium">AI-rewritten bullets in their language</div>
         </div>
       </div>
     </div>
 
-    <div class="authShell">
-      <div class="card" id="authCard">
-        <div class="authbar">
-          <div>
-            <label style="margin-bottom:2px">Welcome back</label>
-            <div class="hint" id="authStatus">Checking login configuration...</div>
+    <!-- Right auth column -->
+    <div class="flex w-full lg:w-1/2 flex-col justify-center px-8 py-16 lg:px-20">
+      <div class="flex w-full max-w-[400px] mx-auto flex-col gap-6">
+
+        <div class="flex h-fit flex-col gap-2">
+          <div class="text-[#e0e0e0] font-['Inter'] text-2xl font-bold leading-normal tracking-[-0.6px]">Sign in to continue</div>
+          <div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Use your developer account &mdash; no password to remember.</div>
+        </div>
+
+        <div id="authStatus" class="text-[13px] text-[#999999]"></div>
+
+        <div id="authErr" class="hidden flex items-center gap-2 text-sm text-[#ef4444] mt-2">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="authErrMsg"></span>
+        </div>
+
+        <div class="flex h-fit flex-col gap-3">
+          <div id="authGithubBtn" class="flex w-full h-12 justify-center items-center bg-[#252525] border-t border-b border-l border-r shadow rounded-xl gap-3 border-[#3d3d3d] cursor-pointer">
+            <div class="size-5 flex flex-col text-white">
+              <svg viewBox="0 0 496 512" class="fill-current"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/></svg>
+            </div>
+            <div class="text-white font-['Inter'] text-sm font-semibold">Continue with GitHub</div>
+          </div>
+          <div id="authGoogleBtn" class="flex w-full h-12 justify-center items-center bg-[#f5f5f5] border-t border-b border-l border-r shadow rounded-xl gap-3 border-transparent cursor-pointer">
+            <div class="size-[18px] flex flex-col text-[#4285f4]">
+              <svg viewBox="0 0 488 512" class="fill-current"><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg>
+            </div>
+            <div class="text-[#1a1a1a] font-['Inter'] text-sm font-semibold">Continue with Google</div>
           </div>
         </div>
-        <div class="authform hidden" id="authForm">
-          <button class="googlebtn" id="googleLoginBtn"><span class="googleIcon">G</span> Continue with Google</button>
-          <div class="oauthDivider">or use email</div>
-          <div>
-            <label for="authEmail">Email</label>
-            <input type="email" id="authEmail" placeholder="you@example.com">
-          </div>
-          <div>
-            <label for="authPassword">Password</label>
-            <input type="password" id="authPassword" placeholder="Minimum 6 characters">
-          </div>
-          <button class="primary" id="loginBtn">Log in</button>
-          <button class="ghost" id="signupBtn">Sign up</button>
+
+        <div class="flex w-full h-fit items-center px-0 py-2 gap-4">
+          <div class="flex h-px flex-col bg-[#2d2d2d] flex-1"></div>
+          <div class="text-[#666666] font-['Inter'] text-xs font-medium leading-normal tracking-[0.6px] uppercase">or</div>
+          <div class="flex h-px flex-col bg-[#2d2d2d] flex-1"></div>
         </div>
-        <div class="err hidden" id="authErr"></div>
-      </div>
-    </div>
-  </section>
 
-  <div class="appOnly appHeader">
-    <div>
-      <h1>Resume workspace</h1>
-      <p class="sub">Tailor, analyze, save, and export application-ready resumes.</p>
-    </div>
-    <span class="pill" id="signedInPill">Signed in</span>
-  </div>
+        <div class="flex h-fit flex-col gap-5">
+          <div class="flex h-fit flex-col gap-2">
+            <div class="text-[#e0e0e0] font-['Inter'] text-[13px] font-semibold tracking-[0.325px]">Work email</div>
+            <div class="flex w-full h-12 items-center bg-[#0f0f0f] border rounded-xl px-4 border-[#2d2d2d]">
+              <input type="email" id="authEmailInput" placeholder="you@company.com" class="w-full h-full bg-transparent outline-none border-none text-[#e0e0e0] placeholder-[#666666] font-['Inter'] text-sm">
+            </div>
+          </div>
+          <div id="authEmailSubmitBtn" class="flex w-full h-12 justify-center items-center bg-[#14b8a6] shadow-[0px_4px_12px_rgba(20,184,166,0.2)] rounded-xl gap-2 cursor-pointer">
+            <div class="text-white font-['Inter'] text-sm font-bold">Continue with email</div>
+            <svg viewBox="0 0 24 24" class="size-4 stroke-white" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
 
-  <div class="appOnly banner"><b>Accuracy guardrail:</b> the editor reorders and re-emphasizes what is already in your resume. It surfaces genuine gaps instead of inventing skills, tools, or metrics.</div>
+        <div class="flex h-fit flex-col items-center mt-2 mb-0 text-center mx-0 gap-4">
+          <div class="flex max-w-[320px] flex-wrap justify-center gap-x-[2.75px] text-[#777777] text-[11px] leading-relaxed">
+            <div class="text-[#777777] font-['Inter'] text-[11px] leading-relaxed text-center">By continuing you agree to our</div>
+            <div class="text-[#14b8a6] font-['Inter'] text-[11px] leading-relaxed text-center">Terms</div>
+            <div class="text-[#777777] font-['Inter'] text-[11px] leading-relaxed text-center">and</div>
+            <div class="text-[#14b8a6] font-['Inter'] text-[11px] leading-relaxed text-center">Privacy Policy</div>
+            <div class="text-[#777777] font-['Inter'] text-[11px] leading-relaxed text-center">.</div>
+          </div>
+          <div class="flex w-10 h-px flex-col bg-[#2d2d2d]"></div>
+          <div class="flex flex-wrap justify-center gap-x-[3px] text-[#999999] text-xs">
+            <div class="text-[#999999] font-['Inter'] text-xs leading-normal text-center">New here?</div>
+            <div class="text-[#14b8a6] font-['Inter'] text-xs font-semibold leading-normal text-center">Creating an account is free.</div>
+          </div>
+        </div>
 
-  <div class="appOnly tabs">
-    <button class="tabbtn active" data-tab-target="tailor">Tailor</button>
-    <button class="tabbtn" data-tab-target="results">Results & exports</button>
-    <button class="tabbtn" data-tab-target="saved">Saved resumes</button>
-    <button class="tabbtn" data-tab-target="settings">Settings</button>
-  </div>
-
-  <div class="card appOnly tab-settings" id="billingCard">
-    <div class="billingtop">
-      <div>
-        <label style="margin-bottom:2px">Access</label>
-        <div class="hint" id="billingStatus">Checking plan status...</div>
-      </div>
-      <span class="pill" id="billingPill">Free beta</span>
-    </div>
-    <div class="planrow" id="planRow"></div>
-  </div>
-
-  <div class="card hidden appOnly tab-saved" id="historyCard">
-    <div class="outhead"><h2>Saved resumes</h2><button class="ghost mini" id="refreshHistoryBtn">Refresh</button></div>
-    <div class="hint" id="historyStatus">Your saved resume generations will appear here.</div>
-    <div class="historylist" id="historyList"></div>
-  </div>
-
-  <div class="card appOnly tab-tailor">
-    <label>Master résumé <span class="hint">(pre-loaded — edit anytime, then Save as default)</span></label>
-    <textarea id="resume" class="tall"></textarea>
-    <div class="btnrow">
-      <label class="uploadbtn">Upload PDF / TXT<input type="file" id="resumeFile" accept=".pdf,.txt" hidden></label>
-      <button class="ghost mini" id="saveBtn">Save as default</button>
-      <button class="ghost mini" id="resetBtn">Reset to original</button>
-      <span class="status" id="resumeFileStatus"></span>
-      <span class="saved hidden" id="savedMsg">Saved ✓</span>
-    </div>
-  </div>
-
-  <div class="card appOnly tab-tailor">
-    <label for="jd">Job description</label>
-    <textarea id="jd" class="tall" placeholder="Paste the full JD here..."></textarea>
-    <div class="btnrow">
-      <label class="uploadbtn">Upload PDF / TXT<input type="file" id="jdFile" accept=".pdf,.txt" hidden></label>
-      <span class="status" id="jdFileStatus"></span>
-    </div>
-    <div class="row" style="margin-top:12px">
-      <div><label for="company">Company <span class="hint">(optional)</span></label><input type="text" id="company" placeholder="e.g. Sarvam AI"></div>
-      <div><label for="role">Role title <span class="hint">(optional)</span></label><input type="text" id="role" placeholder="e.g. Product Manager"></div>
-    </div>
-    <div style="margin-top:12px">
-      <label for="comments">Comments / instructions <span class="hint">(optional)</span></label>
-      <textarea id="comments" placeholder="e.g. Move the leadership project up. Emphasize cross-functional collaboration. Mirror their 'stakeholder alignment' wording where true."></textarea>
-    </div>
-    <div class="opts"><span class="chk"><input type="checkbox" id="wantCover"> <label for="wantCover" style="margin:0">Also write a cover letter (after you approve)</label></span></div>
-    <div class="btnrow" style="margin-top:14px">
-      <button class="primary" id="goBtn">Analyze &amp; generate</button>
-      <span class="status" id="status"></span>
-    </div>
-    <div class="err hidden" id="err"></div>
-  </div>
-
-  <div class="card hidden appOnly tab-results" id="skillCard">
-    <div class="outhead"><h2>Skill alignment</h2><span class="tag">based on the JD</span></div>
-    <div class="meterwrap">
-      <div class="scorebig" id="scoreBig">0%</div>
-      <div class="meterbar"><div class="track"><div class="fill" id="fill" style="width:0%"></div></div>
-        <div class="metersub" id="meterSub"></div></div>
-    </div>
-    <div id="matchGroup"><div class="grouplab">You match</div><div class="chips" id="matchChips"></div></div>
-    <div id="partialGroup"><div class="grouplab">Partial / transferable</div><div class="chips" id="partialChips"></div></div>
-    <div id="missGroup"><div class="grouplab">Missing — add if you have it, else prepare</div><div class="chips" id="missChips"></div></div>
-    <div id="gainGroup" style="margin-top:10px"><div class="grouplab">Skills to gain &amp; how to prep</div><div id="gainList"></div></div>
-  </div>
-
-  <div class="card hidden appOnly tab-results" id="resumeCard">
-    <div class="outhead"><h2>Tailored résumé</h2><div class="btnrow" style="margin-top:0"><button class="ghost mini" id="saveGenerationBtn">Save</button><button class="ghost mini" data-copy="resumeOut">Copy</button></div></div>
-    <div class="out" id="resumeOut"></div>
-    <div style="margin-top:12px" id="changesWrap" class="hidden">
-      <label>Summary of modifications</label>
-      <div class="changes" id="changesOut"></div>
-    </div>
-    <div class="approvebar" id="approveBar">
-      <div style="font-weight:600;margin-bottom:8px">Does this look right?</div>
-      <div class="btnrow" style="margin-top:0">
-        <button class="approve" id="approveBtn">Approve ✓</button>
-        <button class="ghost" id="reviseBtn">Request changes</button>
-        <span class="status" id="approveStatus"></span>
-      </div>
-      <div class="hidden" id="reviseWrap" style="margin-top:12px">
-        <label for="revise">What should change? <span class="hint">(added to your instructions, then regenerates)</span></label>
-        <textarea id="revise" placeholder="e.g. Don't reword the leadership bullet. Push the product launch higher. Drop the internship line for this one."></textarea>
-        <div class="btnrow"><button class="primary mini" id="regenBtn">Regenerate</button></div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="card hidden appOnly tab-results" id="exportCard">
-    <div class="outhead"><h2>PDF templates</h2><span class="tag">download-ready</span></div>
-    <div class="hint">Choose a layout for the generated resume. You can download more than one.</div>
-    <div class="templategrid" id="templateGrid"></div>
-    <div class="status" id="exportStatus" style="margin-top:10px"></div>
+<!-- ============================================================ -->
+<!-- APP VIEW                                                      -->
+<!-- ============================================================ -->
+<div id="appView" class="hidden min-h-screen flex flex-col bg-[#1a1a1a]">
+
+  <header class="flex h-16 shrink-0 justify-between items-center bg-[#1a1a1a] border-b border-b-[#2d2d2d] px-7">
+    <div class="flex shrink-0 items-center">
+      <div class="text-[#14b8a6] font-['Inter'] text-2xl font-bold tracking-[-0.6px]">Resume→Fit</div>
+    </div>
+    <div id="progressStepsWrap" class="flex justify-end items-center flex-1">
+      <div id="progStepJd" class="flex items-center">
+        <div class="size-[26px] flex justify-center items-center bg-[#14b8a6] rounded-full">
+          <div class="text-[#0f0f0f] font-['Inter'] text-xs font-bold">1</div>
+        </div>
+        <div class="ml-1.5 text-[#e0e0e0] font-['Inter'] text-xs font-medium">JD</div>
+        <div class="flex w-7 h-0.5 bg-[#14b8a6] mx-2"></div>
+      </div>
+      <div id="progStepResume" class="flex items-center">
+        <div class="size-[26px] flex justify-center items-center bg-[#3d3d3d] rounded-full">
+          <div class="text-[#999999] font-['Inter'] text-xs font-bold">2</div>
+        </div>
+        <div class="ml-1.5 text-[#666666] font-['Inter'] text-xs font-medium">Resume</div>
+        <div class="flex w-7 h-0.5 bg-[#3d3d3d] mx-2"></div>
+      </div>
+      <div id="progStepAnalyze" class="flex items-center">
+        <div class="size-[26px] flex justify-center items-center bg-[#3d3d3d] rounded-full">
+          <div class="text-[#999999] font-['Inter'] text-xs font-bold">3</div>
+        </div>
+        <div class="ml-1.5 text-[#666666] font-['Inter'] text-xs font-medium">Analyze</div>
+        <div class="flex w-7 h-0.5 bg-[#3d3d3d] mx-2"></div>
+      </div>
+      <div id="progStepDone" class="flex items-center">
+        <div class="size-[26px] flex justify-center items-center bg-[#3d3d3d] rounded-full">
+          <div class="text-[#999999] font-['Inter'] text-xs font-bold">4</div>
+        </div>
+        <div class="ml-1.5 text-[#666666] font-['Inter'] text-xs font-medium">Done</div>
+      </div>
+    </div>
+    <div class="flex shrink-0 items-center gap-4 ml-6">
+      <span id="freeLabel" class="text-xs text-[#999999]"></span>
+      <button id="upgradeNavLink" class="text-xs font-semibold text-[#14b8a6] hover:underline">View plans</button>
+      <button id="logoutBtn" class="hidden text-xs font-semibold text-[#999999] hover:text-[#e0e0e0]">Sign out</button>
+    </div>
+  </header>
+
+  <div class="flex-1 flex flex-col px-7 py-6 gap-5 max-w-[1400px] w-full mx-auto">
+
+    <div class="tabbar flex gap-1 bg-[#1a1a1a] border border-[#2d2d2d] rounded-lg p-1 w-fit">
+      <button class="tabbtn active" data-tab-target="analyze">Analyze</button>
+      <button class="tabbtn" data-tab-target="history">Saved resumes</button>
+      <button class="tabbtn" data-tab-target="settings">Settings</button>
+    </div>
+
+    <!-- Analyze tab -->
+    <div class="tab-analyze flex flex-col lg:flex-row gap-6 items-start">
+
+      <div id="inputPanel" class="flex w-full lg:w-[400px] xl:w-[440px] flex-col shrink-0 gap-5">
+        <div class="flex w-full flex-col bg-[#1a1a1a] border-t border-b border-l border-r rounded-xl p-[18px] gap-2 border-[#2d2d2d]">
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Job description</div>
+          <div class="text-[#999999] font-['Inter'] text-xs leading-normal">Paste the full job posting. We'll find the key skills.</div>
+          <textarea id="jd" placeholder="Paste the full job description here…" class="flex w-full min-h-[140px] flex-col mt-1 mb-0 bg-[#0f0f0f] border-t border-b border-l border-r rounded-lg p-3 mx-0 border-[#2d2d2d] text-[#e0e0e0] font-['Inter'] text-[13px] leading-[1.6] placeholder-[#666666] resize-none focus:border-[#14b8a6]"></textarea>
+          <div class="flex items-center gap-2 mt-1.5">
+            <label class="flex items-center gap-2 text-xs font-['Inter'] font-semibold text-[#999999] bg-[#0f0f0f] border border-[#2d2d2d] rounded-md px-3 py-1.5 cursor-pointer hover:text-[#e0e0e0] hover:border-[#3d3d3d]">
+              Upload file
+              <input type="file" id="jdFile" accept=".pdf,.txt" hidden>
+            </label>
+            <span id="jdFileStatus" class="text-xs text-[#999999]"></span>
+          </div>
+        </div>
+
+        <div class="flex w-full flex-col bg-[#1a1a1a] border-t border-b border-l border-r rounded-xl p-[18px] gap-2 border-[#2d2d2d]">
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Your resume</div>
+          <div class="text-[#999999] font-['Inter'] text-xs leading-normal">Paste from Word, PDF, or LinkedIn.</div>
+          <textarea id="resume" placeholder="Paste your resume here…" class="flex w-full min-h-[160px] flex-col mt-1 mb-0 bg-[#0f0f0f] border-t border-b border-l border-r rounded-lg p-3 mx-0 border-[#2d2d2d] text-[#e0e0e0] font-['Inter'] text-[13px] leading-[1.6] placeholder-[#666666] resize-none focus:border-[#14b8a6]"></textarea>
+          <div class="flex items-center gap-2 mt-1.5">
+            <label class="flex items-center gap-2 text-xs font-['Inter'] font-semibold text-[#999999] bg-[#0f0f0f] border border-[#2d2d2d] rounded-md px-3 py-1.5 cursor-pointer hover:text-[#e0e0e0] hover:border-[#3d3d3d]">
+              Upload file
+              <input type="file" id="resumeFile" accept=".pdf,.txt" hidden>
+            </label>
+            <span id="resumeFileStatus" class="text-xs text-[#999999]"></span>
+            <div class="flex-1"></div>
+            <button id="saveBtn" class="text-xs font-['Inter'] font-semibold text-[#999999] bg-[#0f0f0f] border border-[#2d2d2d] rounded-md px-3 py-1.5 hover:text-[#e0e0e0] hover:border-[#3d3d3d]">Save default</button>
+            <button id="resetBtn" class="text-xs font-['Inter'] font-semibold text-[#999999] bg-[#0f0f0f] border border-[#2d2d2d] rounded-md px-3 py-1.5 hover:text-[#e0e0e0] hover:border-[#3d3d3d]">Reset</button>
+            <span id="savedMsg" class="hidden text-xs font-['Inter'] font-semibold text-[#14b8a6]">Saved ✓</span>
+          </div>
+        </div>
+
+        <div class="flex w-full flex-col bg-[#1a1a1a] border-t border-b border-l border-r rounded-xl p-[18px] gap-3 border-[#2d2d2d]">
+          <div class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Role details <span class="text-[#666666] font-normal text-xs">(optional)</span></div>
+          <div class="flex w-full gap-3">
+            <input type="text" id="company" placeholder="e.g. Google" class="flex-1 bg-[#0f0f0f] border border-[#2d2d2d] rounded-lg px-3 py-2 text-[#e0e0e0] font-['Inter'] text-[13px] placeholder-[#666666] focus:border-[#14b8a6]">
+            <input type="text" id="role" placeholder="e.g. ML Engineer" class="flex-1 bg-[#0f0f0f] border border-[#2d2d2d] rounded-lg px-3 py-2 text-[#e0e0e0] font-['Inter'] text-[13px] placeholder-[#666666] focus:border-[#14b8a6]">
+          </div>
+          <textarea id="comments" placeholder="e.g. Emphasize cross-functional collaboration..." class="w-full min-h-[70px] bg-[#0f0f0f] border border-[#2d2d2d] rounded-lg p-3 text-[#e0e0e0] font-['Inter'] text-[13px] leading-[1.6] placeholder-[#666666] resize-none focus:border-[#14b8a6]"></textarea>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="wantCover" class="size-4 rounded border-[#3d3d3d] bg-[#0f0f0f] text-[#14b8a6]">
+            <label for="wantCover" class="text-xs font-['Inter'] text-[#999999]">Also generate a cover letter</label>
+          </div>
+        </div>
+
+        <button id="goBtn" class="w-full h-12 flex justify-center items-center bg-[#14b8a6] shadow-[0px_4px_14px_rgba(20,184,166,0.35)] rounded-lg gap-2 hover:brightness-110 transition">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="text-[#0f0f0f] font-['Inter'] text-[15px] font-bold leading-normal">Analyze &amp; tailor →</span>
+        </button>
+
+        <div id="err" class="hidden flex items-center gap-2 text-sm text-[#ef4444]">
+          <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="errMsg"></span>
+        </div>
+        <div id="status" class="text-xs text-[#999999]"></div>
+      </div>
+
+      <div id="resultsPanel" class="flex-1 flex flex-col gap-5 min-w-0 w-full">
+
+        <div id="emptyState" class="flex flex-col items-center justify-center text-center h-full min-h-[420px] p-8 bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl">
+          <div class="flex max-w-[420px] flex-col items-center gap-6">
+            <div class="size-16 flex justify-center items-center bg-[#1a1a1a] border-t border-b border-l border-r rounded-full border-[#2d2d2d]">
+              <div class="size-8 flex flex-col text-[#14b8a6]">
+                <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-3">
+              <div class="text-[#e0e0e0] font-['Inter'] text-xl font-bold">Your match will appear here</div>
+              <div class="max-w-[360px] text-[#999999] font-['Inter'] text-sm leading-relaxed">Paste a job description and your resume, then hit &lsquo;Analyze &amp; tailor&rsquo; to see your fit score, gaps, and rewritten bullets.</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="loadingState" class="hidden flex-col items-center justify-center text-center h-full min-h-[420px] p-8 bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl">
+          <div class="flex max-w-[420px] flex-col items-center gap-4 mx-auto">
+            <div class="size-16 flex justify-center items-center mt-0 mb-1 bg-[#14b8a61a] border-t border-b border-l border-r rounded-2xl mx-0 border-[#14b8a64d] relative">
+              <div class="absolute inset-0 rounded-2xl border-2 border-transparent border-t-[#14b8a6] animate-spin"></div>
+              <div class="size-7 flex flex-col text-[#14b8a6]">
+                <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+              </div>
+            </div>
+            <div class="text-[#e0e0e0] font-['Inter'] text-xl font-bold text-center">Analyzing your match&hellip;</div>
+            <div class="max-w-[400px] text-[#999999] font-['Inter'] text-[13px] leading-[1.6] text-center">Reading the job description and your resume, scoring fit, ranking gaps, and rewriting your bullets. This usually takes about 10 seconds.</div>
+            <div class="flex w-full max-w-[420px] flex-col mt-4 gap-3">
+              <div class="animate-pulse flex w-full h-3 flex-col bg-[#252525] rounded-full"></div>
+              <div class="animate-pulse flex w-[85%] h-3 flex-col bg-[#252525] rounded-full"></div>
+              <div class="animate-pulse flex w-[60%] h-3 flex-col bg-[#252525] rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="scoreCard" class="hidden flex w-full flex-col bg-[#1f1f1f] border-t border-b border-l border-r rounded-2xl p-6 gap-5 border-[#2d2d2d]">
+          <button id="exportShortcutBtn" class="flex w-full h-12 justify-center items-center bg-[linear-gradient(90deg,_rgb(20,_184,_166)_0%,_rgb(13,_148,_136)_100%)] shadow-[0px_4px_14px_rgba(20,184,166,0.35)] rounded-lg gap-2">
+            <div class="size-4 flex flex-col shrink-0 text-white">
+              <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </div>
+            <span class="text-white font-['Inter'] text-sm font-bold leading-normal">Export</span>
+          </button>
+
+          <div class="flex w-full flex-col items-center bg-[linear-gradient(rgb(26,_26,_26)_0%,_rgb(36,_36,_36)_100%)] border-t border-b border-l border-r shadow-[0px_2px_20px_rgba(0,0,0,0.4)] rounded-xl px-6 py-7 gap-3 border-[#2d2d2d]">
+            <div class="text-[#999999] font-['Inter'] text-[11px] font-medium leading-normal tracking-[1.32px] uppercase">Match score</div>
+            <div class="relative flex items-center justify-center">
+              <svg class="-rotate-90" width="110" height="110" viewBox="0 0 100 100">
+                <circle class="text-[#333333]" cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="7"></circle>
+                <circle id="ringFill" cx="50" cy="50" r="45" fill="none" stroke="#14b8a6" stroke-width="7" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" class="transition-all"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <div id="scoreNumber" class="text-[#14b8a6] font-['Inter'] text-3xl font-bold leading-none">0</div>
+                <div class="text-[#666666] font-['Inter'] text-[10px] leading-none mt-1">/ 100</div>
+              </div>
+            </div>
+            <span id="scoreTag" class="text-[#e0e0e0] font-['Inter'] text-sm font-bold leading-normal">Analyzing&hellip;</span>
+            <div class="flex w-full h-1 flex-col bg-[#333333] rounded-full overflow-hidden">
+              <div id="matchTrack" style="width:0%" class="h-full rounded-full bg-teal-500 transition-all"></div>
+            </div>
+            <span id="matchLabel" class="text-[#aaaaaa] font-['Inter'] text-[13px] leading-normal text-center"></span>
+            <div id="scoreBadge" class="mt-1"></div>
+            <div id="scoreDesc" class="text-[#aaaaaa] font-['Inter'] text-[13px] leading-normal text-center"></div>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-1.5">
+              <span class="text-[#999999] font-['Inter'] text-[11px] font-medium leading-normal tracking-[1px] uppercase">You match</span>
+              <div id="matchChips" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div id="partialGroup" class="flex flex-col gap-1.5">
+              <span class="text-[#999999] font-['Inter'] text-[11px] font-medium leading-normal tracking-[1px] uppercase">Partial / transferable</span>
+              <div id="partialChips" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div id="missGroup" class="flex flex-col gap-1.5">
+              <span class="text-[#999999] font-['Inter'] text-[11px] font-medium leading-normal tracking-[1px] uppercase">Missing</span>
+              <div id="missChips" class="flex flex-wrap gap-1.5"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="accordion" class="hidden flex flex-col gap-3">
+
+          <div class="acc-item is-open bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl overflow-hidden" id="acc-gaps">
+            <div class="acc-header flex items-center justify-between px-5 py-4 cursor-pointer select-none" data-acc="acc-gaps">
+              <div class="flex items-center gap-2.5">
+                <div class="size-4 flex flex-col shrink-0 text-[#ef4444]">
+                  <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </div>
+                <span class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Key gaps</span>
+                <span id="gapCount" class="text-[#999999] font-['Inter'] text-xs font-bold bg-[#2d2d2d] rounded-full px-2 py-0.5">0</span>
+              </div>
+              <svg class="acc-chevron size-4 text-[#999999]" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="acc-body px-5 pb-5">
+              <div id="gapList" class="flex flex-col gap-2"></div>
+            </div>
+          </div>
+
+          <div class="acc-item bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl overflow-hidden" id="acc-bullets">
+            <div class="acc-header flex items-center justify-between px-5 py-4 cursor-pointer select-none" data-acc="acc-bullets">
+              <div class="flex items-center gap-2.5">
+                <div class="size-4 flex flex-col shrink-0 text-[#14b8a6]">
+                  <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                </div>
+                <span class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Rewritten bullets</span>
+                <span id="bulletCount" class="text-[#999999] font-['Inter'] text-xs font-bold bg-[#2d2d2d] rounded-full px-2 py-0.5">0</span>
+              </div>
+              <svg class="acc-chevron size-4 text-[#999999]" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="acc-body px-5 pb-5">
+              <p class="text-xs text-[#999999] mb-2">Your experience, their language — no fabrication.</p>
+              <div id="bulletList" class="flex flex-col gap-2.5"></div>
+            </div>
+          </div>
+
+          <div class="acc-item bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl overflow-hidden" id="acc-highlights">
+            <div class="acc-header flex items-center justify-between px-5 py-4 cursor-pointer select-none" data-acc="acc-highlights">
+              <div class="flex items-center gap-2.5">
+                <div class="size-4 flex flex-col shrink-0 text-[#14b8a6]">
+                  <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <span class="text-[#e0e0e0] font-['Inter'] text-base font-bold">What you already have</span>
+                <span id="highlightCount" class="text-[#999999] font-['Inter'] text-xs font-bold bg-[#2d2d2d] rounded-full px-2 py-0.5">0</span>
+              </div>
+              <svg class="acc-chevron size-4 text-[#999999]" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="acc-body px-5 pb-5">
+              <div id="highlightList" class="flex flex-col gap-2"></div>
+            </div>
+          </div>
+
+          <div class="acc-item hidden bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl overflow-hidden" id="acc-tailored">
+            <div class="acc-header flex items-center justify-between px-5 py-4 cursor-pointer select-none" data-acc="acc-tailored">
+              <div class="flex items-center gap-2.5">
+                <div class="size-4 flex flex-col shrink-0 text-[#14b8a6]">
+                  <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </div>
+                <span class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Tailored r&eacute;sum&eacute;</span>
+              </div>
+              <svg class="acc-chevron size-4 text-[#999999]" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="acc-body px-5 pb-5">
+              <div class="flex gap-2 flex-wrap mb-3">
+                <button id="saveGenerationBtn" class="text-xs font-['Inter'] font-bold text-[#0f0f0f] bg-[#14b8a6] rounded-md px-3 py-1.5">Save</button>
+                <button data-copy="resumeOut" class="text-xs font-['Inter'] font-medium text-[#14b8a6] border border-[#14b8a6] rounded-md px-3 py-1.5">Copy text</button>
+                <button id="reviseBtn" class="text-xs font-['Inter'] font-medium text-[#e0e0e0] border border-[#3d3d3d] rounded-md px-3 py-1.5">Request changes</button>
+                <span id="approveStatus" class="text-xs font-['Inter'] text-[#999999] self-center"></span>
+              </div>
+              <div id="resumeOut" class="whitespace-pre-wrap font-mono text-xs bg-black/20 border border-[#2d2d2d] rounded-lg p-4 max-h-[480px] overflow-auto"></div>
+              <div id="changesWrap" class="hidden">
+                <div id="changesOut" class="whitespace-pre-wrap text-xs bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mt-3"></div>
+              </div>
+              <div id="reviseWrap" class="hidden mt-3">
+                <textarea id="revise" placeholder="e.g. Don't reword the leadership bullet." class="w-full bg-[#1a1a1a] border border-[#2d2d2d] rounded-lg p-3 text-xs text-[#e0e0e0] font-['Inter'] min-h-[80px]"></textarea>
+                <button id="regenBtn" class="mt-2 text-xs font-['Inter'] font-bold text-[#0f0f0f] bg-[#14b8a6] rounded-md px-3 py-1.5">Regenerate</button>
+              </div>
+              <div id="approveBar" class="mt-3">
+                <button id="approveBtn" class="w-full h-11 flex items-center justify-center text-sm font-['Inter'] font-bold text-[#0f0f0f] bg-[#22c55e] rounded-lg">Approve &#10003;</button>
+              </div>
+              <div class="mt-4">
+                <div id="templateGrid" class="grid grid-cols-2 gap-2"></div>
+                <div id="exportStatus" class="text-xs text-[#999999] mt-2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="acc-item hidden bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl overflow-hidden" id="acc-cover">
+            <div class="acc-header flex items-center justify-between px-5 py-4 cursor-pointer select-none" data-acc="acc-cover">
+              <div class="flex items-center gap-2.5">
+                <div class="size-4 flex flex-col shrink-0 text-[#14b8a6]">
+                  <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </div>
+                <span class="text-[#e0e0e0] font-['Inter'] text-base font-bold">Cover letter</span>
+              </div>
+              <svg class="acc-chevron size-4 text-[#999999]" stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="acc-body px-5 pb-5">
+              <button data-copy="coverOut" class="text-xs font-['Inter'] font-medium text-[#14b8a6] border border-[#14b8a6] rounded-md px-3 py-1.5 mb-3">Copy</button>
+              <div id="coverOut" class="whitespace-pre-wrap font-mono text-xs bg-black/20 border border-[#2d2d2d] rounded-lg p-4"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="resultsErrorState" class="hidden flex-col items-center justify-center text-center h-full min-h-[420px] p-8 bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl">
+          <div class="flex max-w-[420px] flex-col items-center gap-4 mx-auto">
+            <div class="size-16 flex justify-center items-center mt-0 mb-1 bg-[#ef44441a] border-t border-b border-l border-r rounded-2xl mx-0 border-[#ef44444d]">
+              <div class="size-7 flex flex-col text-[#ef4444]">
+                <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+            </div>
+            <div class="text-[#e0e0e0] font-['Inter'] text-xl font-bold text-center">We couldn&rsquo;t parse that</div>
+            <div id="resultsErrorMsg" class="max-w-[400px] text-[#999999] font-['Inter'] text-[13px] leading-[1.6] text-center">Something went wrong. Is the server running and OPENAI_API_KEY configured?</div>
+            <button id="errorRetryBtn" class="flex h-11 justify-center items-center mt-2 bg-[#14b8a6] shadow-[0px_4px_14px_rgba(20,184,166,0.35)] rounded-lg px-5 gap-2">
+              <div class="size-4 flex flex-col text-[#0f0f0f]">
+                <svg fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              </div>
+              <span class="text-[#0f0f0f] font-['Inter'] text-sm font-bold leading-normal">Try again</span>
+            </button>
+            <div class="mt-1 text-[#777777] font-['Inter'] text-xs text-center">Still stuck? Email support@resumefit.app</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- History tab -->
+    <div class="tab-history hidden flex-col gap-4">
+      <div class="bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-base font-bold text-[#e0e0e0]">Saved resumes</span>
+          <button id="refreshHistoryBtn" class="text-xs font-semibold text-[#14b8a6] border border-[#14b8a6] rounded-md px-3 py-1.5">Refresh</button>
+        </div>
+        <div id="historyStatus" class="text-xs text-[#999999] mb-3">Your saved resume generations will appear here.</div>
+        <div id="historyList" class="flex flex-col gap-2"></div>
+      </div>
+    </div>
+
+    <!-- Settings tab -->
+    <div class="tab-settings hidden flex-col gap-4">
+      <div class="bg-[#1f1f1f] border border-[#2d2d2d] rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-base font-bold text-[#e0e0e0]">Access &amp; billing</span>
+          <span id="billingPill" class="text-xs font-semibold text-[#14b8a6] bg-[#14b8a61a] border border-[#14b8a6] rounded-full px-2.5 py-1">Free</span>
+        </div>
+        <div id="billingStatus" class="text-xs text-[#999999] mb-1">Checking plan status…</div>
+        <div id="usageStatus" class="text-xs text-[#999999] mb-4"></div>
+        <div id="planRow" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="card hidden appOnly tab-results" id="coverCard">
-    <div class="outhead"><h2>Cover letter</h2><button class="ghost mini" data-copy="coverOut">Copy</button></div>
-    <div class="out" id="coverOut"></div>
+  <div id="mobileStickyBar" class="fixed bottom-0 inset-x-0 bg-[#1a1a1a] border-t border-[#2d2d2d] p-3 z-40">
+    <button id="mobileCopyApplyBtn" class="w-full h-12 flex items-center justify-center gap-2 bg-[#14b8a6] rounded-lg text-[#0f0f0f] font-['Inter'] font-bold text-sm">
+      <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Copy to resume &amp; apply
+    </button>
   </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- UPGRADE VIEW                                                  -->
+<!-- ============================================================ -->
+<div id="upgradeView" class="hidden min-h-screen bg-[#1a1a1a]">
+
+  <div class="flex w-full h-16 shrink-0 items-center bg-[#1a1a1a] border-b px-12 py-0 border-b-[#2d2d2d]">
+    <div class="shrink-0 text-[#14b8a6] font-['Inter'] text-[22px] font-bold leading-normal tracking-[-0.55px]">Resume→Fit</div>
+    <div class="flex justify-end items-center flex-1 gap-5">
+      <a id="backToAppLink" href="#" class="flex items-center text-[#999999] text-sm gap-1.5 no-underline hover:text-[#e0e0e0]">
+        <span class="size-3.5 flex flex-col">
+          <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="text-[#999999]"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </span>
+        <span class="text-[#999999] font-['Inter'] text-sm leading-normal">Back to app</span>
+      </a>
+      <div class="flex flex-col bg-[#1a1a1a] border rounded-full px-2.5 py-1 border-[#2d2d2d]">
+        <span id="upgradeCurrentPlanPill" class="text-[#999999] font-['Inter'] text-xs font-medium leading-normal">Free Plan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex w-full flex-col items-center pt-16 pb-14 px-12">
+    <div class="mt-0 mb-4 text-[#14b8a6] font-['Inter'] text-[11px] font-semibold leading-normal tracking-[1.1px] uppercase">Pricing</div>
+    <div class="flex flex-col items-center">
+      <div class="max-w-[640px] text-[#e0e0e0] font-['Inter'] text-[44px] font-semibold leading-tight tracking-[-1.1px] text-center">Land the interview, not just</div>
+      <div class="max-w-[640px] text-[#14b8a6] font-['Inter'] text-[44px] font-semibold leading-tight tracking-[-1.1px] text-center">the application.</div>
+    </div>
+
+    <div class="flex items-center mt-8 bg-[#1a1a1a] border rounded-full p-1 gap-1 border-[#2d2d2d]">
+      <button id="billingToggleMonthly" type="button" class="flex flex-col rounded-full px-[18px] py-2">
+        <span class="text-[#999999] font-['Inter'] text-[13px] font-medium">Monthly</span>
+      </button>
+      <button id="billingToggleAnnual" type="button" class="flex flex-col bg-[#14b8a6] rounded-full px-[18px] py-2">
+        <span class="text-[#0f0f0f] font-['Inter'] text-[13px] font-semibold">Annual — save 20%</span>
+      </button>
+    </div>
+
+    <div class="max-w-[460px] mt-4 text-[#999999] font-['Inter'] text-base leading-relaxed text-center">Get your fit score, AI-rewritten bullets, and ranked skill gaps — everything you need to get to the offer.</div>
+  </div>
+
+  <div class="flex w-full justify-center px-12 pb-20">
+    <div class="flex w-full max-w-[880px] flex-col md:flex-row gap-6">
+
+      <div class="flex flex-col bg-[#1a1a1a] border shadow-[0px_2px_20px_rgba(0,0,0,0.4),0px_0px_0px_1px_rgba(255,255,255,0.03)] flex-1 rounded-2xl p-8 border-[#2d2d2d]">
+        <div class="flex flex-col mb-2 gap-1.5">
+          <div class="text-[#999999] font-['Inter'] text-[13px] font-semibold tracking-[1.3px] uppercase">Free</div>
+          <div class="flex items-end gap-1">
+            <div class="text-[#e0e0e0] font-['Inter'] text-[40px] font-bold leading-none">$0</div>
+            <div class="mb-1.5 text-[#999999] font-['Inter'] text-sm">/forever</div>
+          </div>
+          <div class="text-[#999999] font-['Inter'] text-sm">For your next application.</div>
+          <div id="upgradeFreeUsageNote" class="text-xs text-[#999999] mt-1"></div>
+        </div>
+        <div class="w-full h-px bg-[#2d2d2d] my-6"></div>
+        <div class="flex flex-col flex-1 gap-3.5">
+          <div class="flex items-center gap-2.5">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div class="text-[#e0e0e0] font-['Inter'] text-sm">3 resume matches / month</div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div class="text-[#e0e0e0] font-['Inter'] text-sm">Fit score &amp; top 3 gaps</div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <div class="text-[#e0e0e0] font-['Inter'] text-sm">5 AI-rewritten bullets</div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#3d3d3d]"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <div class="text-[#555555] font-['Inter'] text-sm">Unlimited matches</div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#3d3d3d]"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <div class="text-[#555555] font-['Inter'] text-sm">ATS keyword export</div>
+          </div>
+        </div>
+        <div class="flex flex-col pt-7 mt-auto">
+          <div class="flex w-full h-12 justify-center items-center border rounded-xl border-[#2d2d2d]">
+            <div class="text-[#999999] font-['Inter'] text-sm font-semibold">Current plan</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex w-full relative flex-col bg-[linear-gradient(180deg,#1a1a1a_0%,#242424_100%)] border shadow-[0px_0px_0px_1px_rgba(20,184,166,0.25),0px_8px_40px_rgba(0,0,0,0.5),0px_0px_60px_rgba(20,184,166,0.12)] flex-1 rounded-2xl p-8 border-[#14b8a6]">
+        <div class="flex absolute flex-col top-[-1px] right-7 bg-[#f59e0b] rounded-br-xl rounded-bl-xl px-3 py-[5px]">
+          <div class="text-[#0f0f0f] font-['Inter'] text-[11px] font-bold tracking-[0.55px] uppercase">Most Popular</div>
+        </div>
+        <div class="flex flex-col mb-2 gap-1.5">
+          <div class="text-[#14b8a6] font-['Inter'] text-[13px] font-semibold tracking-[1.3px] uppercase">Pro</div>
+          <div class="flex items-end gap-1">
+            <div id="upgradeProPriceAmount" class="text-[#e0e0e0] font-['Inter'] text-[40px] font-bold leading-none">$12</div>
+            <div id="upgradeProPricePeriod" class="mb-1.5 text-[#999999] font-['Inter'] text-sm">/month billed annually</div>
+          </div>
+          <div class="text-[#999999] font-['Inter'] text-sm">For an active job search.</div>
+        </div>
+        <div class="w-full h-px bg-[#2d2d2d] my-6"></div>
+        <div class="flex flex-col flex-1 gap-3.5">
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Unlimited resume matches</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Full gap analysis with priorities</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Unlimited AI-rewritten bullets</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">ATS keyword &amp; PDF export</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Cover-letter draft generator</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Version history &amp; saved jobs</div></div>
+          <div class="flex items-center gap-2.5"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#e0e0e0] font-['Inter'] text-sm">Priority model access</div></div>
+        </div>
+        <div class="flex flex-col pt-7 mt-auto">
+          <div id="upgradeProCtaBtn" class="flex w-full h-12 justify-center items-center bg-[#14b8a6] shadow-[0px_0px_0px_1px_rgba(20,184,166,0.4),0px_4px_16px_rgba(20,184,166,0.3)] rounded-xl cursor-pointer">
+            <div class="text-[#0f0f0f] font-['Inter'] text-sm font-semibold">Upgrade to Pro</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="flex w-full flex-col items-center px-12 pb-20">
+    <div class="flex flex-col items-center mb-10 gap-2">
+      <div class="text-[#14b8a6] font-['Inter'] text-[11px] font-semibold leading-normal tracking-[1.1px] uppercase">What you get</div>
+      <div class="text-[#e0e0e0] font-['Inter'] text-[32px] font-semibold leading-normal tracking-[-0.8px]">Everything in Pro</div>
+    </div>
+    <div class="flex w-full max-w-[880px] flex-wrap gap-5">
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">Unlimited Matches</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Run as many resume-to-job comparisons as your search demands — no daily caps, no resets.</div></div>
+      </div>
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">Deep Gap Analysis</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Ranked skill gaps with priority scores, so you know exactly which areas to close first.</div></div>
+      </div>
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">AI Bullet Rewriter</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Every experience bullet rewritten by AI to mirror the job's language and maximize ATS scoring.</div></div>
+      </div>
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">ATS &amp; PDF Export</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Export your optimized resume as ATS-clean text or a styled PDF ready to attach and send.</div></div>
+      </div>
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">Saved Jobs &amp; History</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Track every role you've applied to with version history so you can revisit and refine.</div></div>
+      </div>
+      <div class="flex w-full sm:w-[calc(50%_-_10px)] lg:w-[calc(33.333%_-_14px)] flex-col bg-[#1a1a1a] border shadow-[0px_2px_16px_rgba(0,0,0,0.3)] rounded-2xl p-6 gap-4 border-[#2d2d2d]">
+        <div class="size-10 flex shrink-0 justify-center items-center bg-[#0f2421] border rounded-xl border-[#14b8a6]"><span class="size-5 flex flex-col text-[#14b8a6]"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg></span></div>
+        <div class="flex flex-col gap-1.5"><div class="text-[#e0e0e0] font-['Inter'] text-[15px] font-semibold">Priority Model Access</div><div class="text-[#999999] font-['Inter'] text-[13px] leading-relaxed">Your requests run on our fastest tier — results in seconds, not minutes.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex w-full flex-wrap justify-center items-center gap-10 px-12 pb-20">
+    <div class="flex items-center gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><div class="text-[#999999] font-['Inter'] text-sm">Cancel anytime</div></div>
+    <div class="flex items-center gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg><div class="text-[#999999] font-['Inter'] text-sm">We never store your resume</div></div>
+    <div class="flex items-center gap-2"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 text-[#14b8a6]"><polyline points="20 6 9 17 4 12"></polyline></svg><div class="text-[#999999] font-['Inter'] text-sm">14-day money-back guarantee</div></div>
+  </div>
+
+  <div class="flex w-full flex-col items-center text-center px-12 py-20 border-t border-[#2d2d2d]">
+    <div class="text-[#e0e0e0] font-['Inter'] text-[32px] font-bold leading-tight tracking-[-0.8px]">Ready to stand out?</div>
+    <div class="max-w-[480px] mt-4 text-[#999999] font-['Inter'] text-base leading-relaxed">Join thousands of job seekers who've turned rejections into offers with Resume→Fit Pro.</div>
+    <div id="upgradeFinalCtaBtn" class="flex h-12 justify-center items-center bg-[#14b8a6] shadow-[0px_0px_0px_1px_rgba(20,184,166,0.4),0px_4px_16px_rgba(20,184,166,0.3)] rounded-xl cursor-pointer px-8 mt-8">
+      <div class="text-[#0f0f0f] font-['Inter'] text-sm font-semibold">Upgrade to Pro</div>
+    </div>
+    <div class="mt-4 text-[#999999] font-['Inter'] text-xs">$12/mo, cancel anytime</div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-7 left-1/2 bg-[#242424] border border-[#3d3d3d] rounded-lg px-5 py-3 text-sm font-semibold flex items-center gap-2 z-50 pointer-events-none">
+  <span class="toast-dot w-1.5 h-1.5 rounded-full bg-[#14b8a6] shrink-0"></span><span id="toastMsg"></span>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-if (window.pdfjsLib) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+if(window.pdfjsLib){
+  pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 }
+
 const DEFAULT_RESUME = `Fiza Parveen
 Machine Learning Engineer · Generative AI · Agentic Systems · Responsible AI
 Noida, India | fiza.parveen06@gmail.com | +91 9009769402 | linkedin.com/in/fiza-parveen | github.com/Fiza06
@@ -371,425 +744,702 @@ Data/Vector DBs: NumPy, Pandas, Matplotlib, Seaborn, FAISS, ChromaDB, Pinecone
 Tools/Cloud: Git, Docker, ONNX, Streamlit, AWS (Basic), Microsoft Fabric
 Concepts: RLHF, Transformers, RAG, Agentic Workflows, LLM Evaluation, Responsible AI (TrustLLM), Indirect Prompt Injection (IPI/BIPIA), Red-Teaming, Guardrails, Attention, ONNX Inference`;
 
+/* ── Helpers ────────────────────────────────────── */
 const $ = id => document.getElementById(id);
-const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const resumeBox = $("resume");
+const esc = s => (s||"").replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-// Local persistence (normal browser -> localStorage is correct here)
-(function(){ let v=DEFAULT_RESUME;
-  try{ const s=localStorage.getItem("master_resume"); if(s) v=s; }catch(e){}
-  resumeBox.value=v; })();
+/* ── Toast ──────────────────────────────────────── */
+let toastTimer;
+function showToast(msg, type='success'){
+  const t=$('toast'), m=$('toastMsg'), dot=t.querySelector('.toast-dot');
+  m.textContent=msg;
+  dot.style.background = type==='error' ? '#ef4444' : '#14b8a6';
+  t.classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('is-visible'),2400);
+}
 
-$("saveBtn").onclick = () => { try{ localStorage.setItem("master_resume",resumeBox.value);
-  const m=$("savedMsg"); m.classList.remove("hidden"); setTimeout(()=>m.classList.add("hidden"),1500);
-  }catch(e){ alert("Couldn't save locally."); } };
-$("resetBtn").onclick = () => { resumeBox.value=DEFAULT_RESUME; try{ localStorage.removeItem("master_resume"); }catch(e){} };
+/* ── View state machine ─────────────────────────── */
+function setView(view){
+  document.body.dataset.view=view;
+  $('authView').classList.toggle('hidden', view!=='auth');
+  $('appView').classList.toggle('hidden', view!=='app');
+  $('upgradeView').classList.toggle('hidden', view!=='upgrade');
+  if(view==='upgrade') loadBilling();
+}
+setView('auth');
 
-// ---- File upload: PDF (via pdf.js) or plain text -> fills the textarea ----------
+/* ── Progress steps ─────────────────────────────── */
+function setProgress(stage){ // 0=none,1=jd,2=resume,3=analyzing,4=done
+  ['progStepJd','progStepResume','progStepAnalyze','progStepDone'].forEach((id,i)=>{
+    const el=$(id); if(!el) return;
+    const active = stage > i;
+    const circle=el.children[0], label=el.children[1], connector=el.children[2];
+    if(circle){ circle.style.background = active?'#14b8a6':'#3d3d3d'; const num=circle.firstElementChild; if(num) num.style.color = active?'#0f0f0f':'#999999'; }
+    if(label){ label.style.color = active?'#e0e0e0':'#666666'; }
+    if(connector){ connector.style.background = stage>i+1 ? '#14b8a6':'#3d3d3d'; }
+  });
+}
+function recomputeProgress(){
+  let stage=0;
+  if($('jd').value.trim()) stage=1;
+  if($('jd').value.trim() && resumeBox.value.trim()) stage=2;
+  setProgress(stage);
+}
+
+/* ── Local persistence ──────────────────────────── */
+const resumeBox=$('resume');
+(function(){
+  let v=DEFAULT_RESUME;
+  try{const s=localStorage.getItem('master_resume'); if(s) v=s;}catch(e){}
+  resumeBox.value=v;
+})();
+$('saveBtn').onclick=()=>{
+  try{localStorage.setItem('master_resume',resumeBox.value); showToast('Resume saved as default ✓');}catch(e){showToast('Could not save locally','error');}
+};
+$('resetBtn').onclick=()=>{resumeBox.value=DEFAULT_RESUME; try{localStorage.removeItem('master_resume');}catch(e){} recomputeProgress();};
+$('jd').addEventListener('input', recomputeProgress);
+resumeBox.addEventListener('input', recomputeProgress);
+recomputeProgress();
+
+/* ── PDF extraction ─────────────────────────────── */
 async function extractPdfText(file){
-  const buf = await file.arrayBuffer();
-  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
-  let text = "";
-  for(let i=1; i<=pdf.numPages; i++){
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    // group items into lines by their vertical position for cleaner output
-    let lastY=null, line="";
-    const lines=[];
+  const buf=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let text='';
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const content=await page.getTextContent();
+    let lastY=null,line='';const lines=[];
     for(const it of content.items){
-      const y = it.transform[5];
-      if(lastY!==null && Math.abs(y-lastY)>3){ lines.push(line.trim()); line=""; }
-      line += it.str + " "; lastY = y;
+      const y=it.transform[5];
+      if(lastY!==null&&Math.abs(y-lastY)>3){lines.push(line.trim());line='';}
+      line+=it.str+' ';lastY=y;
     }
     if(line.trim()) lines.push(line.trim());
-    text += lines.join("\n") + "\n";
+    text+=lines.join('\n')+'\n';
   }
   return text.trim();
 }
-
-function wireUpload(inputId, targetId, statusId){
+function wireUpload(inputId,targetId,statusId){
   const input=$(inputId); if(!input) return;
-  input.addEventListener("change", async (e)=>{
+  input.addEventListener('change',async(e)=>{
     const f=e.target.files[0]; if(!f) return;
     const st=$(statusId);
-    const isPdf = f.type==="application/pdf" || f.name.toLowerCase().endsWith(".pdf");
-    st.innerHTML='<span class="spinner"></span> Reading '+(isPdf?"PDF":"file")+'…';
+    const isPdf=f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf');
+    st.innerHTML='Reading '+(isPdf?'PDF':'file')+'…';
     try{
-      let t="";
-      if(isPdf){
-        if(!window.pdfjsLib) throw new Error("pdf library not loaded");
-        t = await extractPdfText(f);
-      } else {
-        t = await f.text();
-      }
-      $(targetId).value = t;
-      st.textContent = t ? "Loaded ✓ — review / edit the text below" : "No text found (a scanned image PDF can't be read here)";
-    }catch(err){
-      st.textContent = "Couldn't read that file — paste the text instead.";
-    }
-    input.value=""; // allow re-uploading the same file
+      let t='';
+      if(isPdf){if(!window.pdfjsLib) throw new Error('pdf library not loaded'); t=await extractPdfText(f);}
+      else{t=await f.text();}
+      $(targetId).value=t;
+      st.textContent=t?'Loaded ✓':'No text found (scanned image PDF cannot be read here)';
+      recomputeProgress();
+    }catch(err){st.textContent="Couldn't read file — paste the text instead.";}
+    input.value='';
   });
 }
-wireUpload("resumeFile","resume","resumeFileStatus");
-wireUpload("jdFile","jd","jdFileStatus");
+wireUpload('resumeFile','resume','resumeFileStatus');
+wireUpload('jdFile','jd','jdFileStatus');
 
-document.querySelectorAll("[data-copy]").forEach(b=>{ b.onclick=()=>{ const t=$(b.dataset.copy).textContent;
-  navigator.clipboard.writeText(t).then(()=>{ const o=b.textContent; b.textContent="Copied ✓"; setTimeout(()=>b.textContent=o,1200); }); }; });
+/* ── Copy buttons ───────────────────────────────── */
+document.querySelectorAll('[data-copy]').forEach(b=>{
+  b.onclick=()=>{
+    const t=$(b.dataset.copy).textContent;
+    navigator.clipboard.writeText(t).then(()=>showToast('Copied to clipboard ✓'));
+  };
+});
 
-async function api(path, payload){
-  const headers={"Content-Type":"application/json"};
-  const r = await fetch(path,{method:"POST",headers,body:JSON.stringify(payload)});
-  const j = await r.json();
-  if(!r.ok || j.error) throw new Error(j.error || ("server "+r.status));
+/* ── API helper ─────────────────────────────────── */
+async function authHeader(){
+  if(sb && currentUser){
+    try{
+      const {data}=await sb.auth.getSession();
+      if(data && data.session) return {'Authorization':'Bearer '+data.session.access_token};
+    }catch(e){}
+  }
+  return {};
+}
+async function api(path,payload){
+  const headers={'Content-Type':'application/json', ...(await authHeader())};
+  const r=await fetch(path,{method:'POST',headers,body:JSON.stringify(payload)});
+  const j=await r.json();
+  if(!r.ok||j.error){
+    const err=new Error(j.error||('server '+r.status));
+    err.upgradeRequired=!!j.upgrade_required;
+    throw err;
+  }
   return j;
 }
 
-async function loadBilling(){
-  const status=$("billingStatus"), pill=$("billingPill"), row=$("planRow");
-  if(!status || !row) return;
+/* ── Tabs ───────────────────────────────────────── */
+function setTab(tab){
+  const valid=['analyze','history','settings'];
+  const next=valid.includes(tab)?tab:'analyze';
+  document.body.dataset.tab=next;
+  document.querySelectorAll('[data-tab-target]').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.tabTarget===next);
+  });
+  document.querySelector('.tab-analyze').classList.toggle('hidden',next!=='analyze');
+  document.querySelector('.tab-history').classList.toggle('hidden',next!=='history');
+  document.querySelector('.tab-settings').classList.toggle('hidden',next!=='settings');
+}
+setTab('analyze');
+document.querySelectorAll('[data-tab-target]').forEach(btn=>{
+  btn.onclick=()=>{
+    setTab(btn.dataset.tabTarget);
+    if(btn.dataset.tabTarget==='history') loadHistory();
+  };
+});
+
+/* ── Accordion ──────────────────────────────────── */
+document.querySelectorAll('.acc-header').forEach(h=>{
+  h.onclick=()=>{ h.closest('.acc-item').classList.toggle('is-open'); };
+});
+
+/* ── Auth ───────────────────────────────────────── */
+let sb=null, currentUser=null, localMode=false;
+
+function showAuthError(msg){
+  const el=$('authErr'),msgEl=$('authErrMsg');
+  msgEl.textContent=msg||'';
+  el.classList.toggle('hidden',!msg);
+}
+
+function applyAuthedView(){
+  const unlocked=localMode||!!currentUser;
+  setView(unlocked?'app':'auth');
+  $('logoutBtn').classList.toggle('hidden',!currentUser);
+  if(localMode){
+    $('authStatus').textContent='Local mode is active — connect Supabase to enable login.';
+    $('freeLabel').textContent='Local mode';
+  } else if(!sb){
+    $('authStatus').textContent='Login is ready but Supabase env vars are not configured yet.';
+  } else if(currentUser){
+    $('freeLabel').textContent=currentUser.email||'Signed in';
+  } else {
+    $('authStatus').textContent='';
+  }
+}
+
+// Temporary: force the demo/local-mode experience (skip real login) regardless
+// of whether Supabase is configured on the server. Flip to false to restore
+// real auth once you're ready to require sign-in on this deployment.
+const FORCE_DEMO_MODE = true;
+
+async function initSupabase(){
+  if(FORCE_DEMO_MODE){ localMode=true; applyAuthedView(); return; }
   try{
-    const r=await fetch("/api/billing/config");
+    const r=await fetch('/api/supabase/config');
     const cfg=await r.json();
-    const free=cfg.free_access;
-    status.textContent=free
-      ? "Free access is active while we build the production product. Paid plans are scaffolded for later."
-      : "Paid access is configured for this deployment.";
-    pill.textContent=free ? "Free beta" : "Billing enabled";
-    row.innerHTML=(cfg.plans||[]).map(p=>{
-      const active=p.active || (free && p.id==="free");
-      const features=(p.features||[]).map(f=>`<li>${esc(f)}</li>`).join("");
-      const note=p.stripe_configured ? "" : `<div class="hint" style="margin-top:8px">Checkout not configured yet</div>`;
-      return `<div class="plan ${active?"active":""}">
-        <h3>${esc(p.name)}</h3>
-        <div class="price">${esc(p.price)}</div>
-        <p>${esc(p.description)}</p>
-        <ul>${features}</ul>
-        ${note}
-      </div>`;
-    }).join("");
+    if(!cfg.configured){localMode=true;applyAuthedView();return;}
+    if(!window.supabase){localMode=true;applyAuthedView();return;}
+    sb=window.supabase.createClient(cfg.url,cfg.anon_key);
+    const {data}=await sb.auth.getUser();
+    currentUser=data.user||null;
+    applyAuthedView();
+    if(currentUser){await loadHistory();await loadBilling();}
+    sb.auth.onAuthStateChange(async(_event,session)=>{
+      currentUser=session&&session.user?session.user:null;
+      showAuthError('');applyAuthedView();
+      if(currentUser){setTab('analyze');await loadHistory();await loadBilling();}
+      else{$('historyList').innerHTML='';setTab('analyze');}
+    });
+  }catch(e){localMode=true;applyAuthedView();}
+}
+
+async function loginWithProvider(provider){
+  if(!sb) return;
+  showAuthError('');
+  try{
+    const {error}=await sb.auth.signInWithOAuth({provider,options:{redirectTo:window.location.origin}});
+    if(error) throw error;
+  }catch(e){showAuthError(e.message||(provider+' login failed.'));}
+}
+
+async function sendMagicLink(){
+  if(!sb){ showAuthError('Supabase is not configured yet.'); return; }
+  const email=$('authEmailInput').value.trim();
+  if(!email){showAuthError('Enter your email.');return;}
+  showAuthError('');
+  try{
+    const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:window.location.origin}});
+    if(error) throw error;
+    $('authStatus').textContent=`Check ${email} for a sign-in link.`;
+  }catch(e){showAuthError(e.message||'Could not send magic link.');}
+}
+
+$('authGoogleBtn').onclick=()=>loginWithProvider('google');
+$('authGithubBtn').onclick=()=>loginWithProvider('github');
+$('authEmailSubmitBtn').onclick=()=>sendMagicLink();
+$('logoutBtn').onclick=async()=>{if(sb) await sb.auth.signOut();};
+$('upgradeNavLink').onclick=()=>setView('upgrade');
+$('backToAppLink').onclick=(e)=>{e.preventDefault();setView('app');};
+initSupabase();
+
+/* ── Billing / plans / usage ────────────────────── */
+let selectedInterval='annual';
+
+function setBillingInterval(interval){
+  selectedInterval=interval;
+  const monthly=$('billingToggleMonthly'), annual=$('billingToggleAnnual');
+  if(monthly){ monthly.style.background = interval==='monthly'?'#14b8a6':'transparent'; const s=monthly.querySelector('span'); s.style.color=interval==='monthly'?'#0f0f0f':'#999999'; s.style.fontWeight=interval==='monthly'?'600':'500'; }
+  if(annual){ annual.style.background = interval==='annual'?'#14b8a6':'transparent'; const s=annual.querySelector('span'); s.style.color=interval==='annual'?'#0f0f0f':'#999999'; s.style.fontWeight=interval==='annual'?'600':'500'; }
+  const amount=$('upgradeProPriceAmount'), period=$('upgradeProPricePeriod');
+  if(amount) amount.textContent = interval==='annual' ? '$12' : '$15';
+  if(period) period.textContent = interval==='annual' ? '/month billed annually' : '/month, billed monthly';
+}
+$('billingToggleMonthly').onclick=()=>setBillingInterval('monthly');
+$('billingToggleAnnual').onclick=()=>setBillingInterval('annual');
+setBillingInterval('annual');
+
+async function loadBilling(){
+  try{
+    const headers=await authHeader();
+    const r=await fetch('/api/billing/config',{headers});
+    const cfg=await r.json();
+    const isPro=cfg.current_plan==='pro';
+
+    if($('billingPill')) $('billingPill').textContent=isPro?'Pro':'Free';
+    if($('billingStatus')) $('billingStatus').textContent = cfg.free_access
+      ? 'Unlimited while running locally without Supabase configured.'
+      : (isPro?'Pro plan active — unlimited matches.':'Free plan — limited matches per month.');
+    if($('usageStatus')) $('usageStatus').textContent = (!isPro && cfg.matches_used!=null && cfg.matches_limit!=null)
+      ? `${cfg.matches_used} of ${cfg.matches_limit} matches used this month`
+      : '';
+    if($('planRow')){
+      $('planRow').innerHTML=(cfg.plans||[]).map(p=>{
+        const active=p.active;
+        const features=(p.features||[]).map(f=>`<li class="flex items-center gap-1.5 text-xs text-[#999999]"><span class="text-[#14b8a6]">✓</span>${esc(f)}</li>`).join('');
+        return `<div class="rounded-xl border ${active?'border-[#14b8a6]':'border-[#2d2d2d]'} p-4" style="${active?'background:rgba(20,184,166,0.06)':''}">
+          <div class="text-sm font-bold text-[#e0e0e0]">${esc(p.name)}</div>
+          <div class="text-lg font-bold text-[#e0e0e0] mt-1">${esc(p.price)}<span class="text-xs font-normal text-[#999999]"> /${esc(p.interval||'')}</span></div>
+          <ul class="flex flex-col gap-1 mt-2">${features}</ul>
+        </div>`;
+      }).join('');
+    }
+    if($('upgradeCurrentPlanPill')) $('upgradeCurrentPlanPill').textContent=isPro?'Pro Plan':'Free Plan';
+    if($('upgradeFreeUsageNote')) $('upgradeFreeUsageNote').textContent = (!isPro && cfg.matches_used!=null && cfg.matches_limit!=null)
+      ? `${cfg.matches_used} of ${cfg.matches_limit} matches used this month`
+      : '';
   }catch(e){
-    status.textContent="Free access is active. Billing configuration is unavailable in this session.";
-    row.innerHTML="";
+    if($('billingStatus')) $('billingStatus').textContent='Billing configuration unavailable.';
   }
 }
 loadBilling();
 
-let sb=null, currentUser=null;
-let exportTemplates=[], selectedTemplate="classic";
+async function startCheckout(planId){
+  try{
+    const headers={'Content-Type':'application/json', ...(await authHeader())};
+    const r=await fetch('/api/billing/checkout',{method:'POST',headers,body:JSON.stringify({
+      plan_id:planId, interval:selectedInterval,
+      success_url:window.location.origin, cancel_url:window.location.origin,
+    })});
+    const j=await r.json();
+    if(j.error){showToast(j.error,'error');return;}
+    if(j.checkout_url){window.location.href=j.checkout_url;}
+    else if(j.message){showToast(j.message);}
+  }catch(e){showToast('Checkout failed: '+e.message,'error');}
+}
+$('upgradeProCtaBtn').onclick=()=>startCheckout('pro');
+$('upgradeFinalCtaBtn').onclick=()=>startCheckout('pro');
+
+/* ── History ────────────────────────────────────── */
+function markHasResults(v){ document.body.dataset.hasResults = v ? 'true' : 'false'; }
+
+async function loadHistory(){
+  if(!sb||!currentUser) return;
+  const status=$('historyStatus'),list=$('historyList');
+  status.textContent='Loading…';
+  const {data,error}=await sb.from('resume_generations')
+    .select('id,title,company,role,created_at,source_resume,job_description,tailored_resume,cover_letter,changes,analysis,comments,template_id')
+    .order('created_at',{ascending:false})
+    .limit(20);
+  if(error){status.textContent='Could not load — check Supabase schema.';return;}
+  if(!data||!data.length){status.textContent='No saved resumes yet.';list.innerHTML='';return;}
+  status.textContent=`${data.length} saved resume${data.length===1?'':'s'}.`;
+  list.innerHTML=data.map(item=>{
+    const when=item.created_at?new Date(item.created_at).toLocaleString():'';
+    const subtitle=[item.role,item.company].filter(Boolean).join(' · ');
+    return `<div class="flex items-start justify-between gap-3 bg-[#1a1a1a] border border-[#2d2d2d] rounded-lg px-4 py-3 hover:border-[#3d3d3d]">
+      <div>
+        <div class="text-sm font-semibold text-[#e0e0e0]">${esc(item.title||'Saved resume')}</div>
+        <div class="text-xs text-[#999999] mt-0.5">${esc(subtitle||when)}${subtitle&&when?' · '+esc(when):''}</div>
+      </div>
+      <button class="text-xs font-semibold text-[#14b8a6] border border-[#14b8a6] rounded-md px-3 py-1.5 shrink-0" data-load-id="${esc(item.id)}">Open</button>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('[data-load-id]').forEach(btn=>{
+    btn.onclick=()=>{
+      const item=data.find(x=>x.id===btn.dataset.loadId);
+      if(!item) return;
+      resumeBox.value=item.source_resume||'';
+      $('jd').value=item.job_description||'';
+      $('company').value=item.company||'';
+      $('role').value=item.role||'';
+      $('comments').value=item.comments||'';
+      $('resumeOut').textContent=item.tailored_resume||'';
+      $('coverOut').textContent=item.cover_letter||'';
+      $('changesOut').textContent=item.changes||'';
+      selectedTemplate=item.template_id||'classic';
+      lastInputs={jd:item.job_description||'',resume:item.source_resume||'',comments:item.comments||''};
+      lastAnalysis=item.analysis||null;
+      if(lastAnalysis) renderAnalysis(lastAnalysis);
+      $('emptyState').classList.add('hidden');
+      $('loadingState').classList.add('hidden');
+      $('resultsErrorState').classList.add('hidden');
+      $('scoreCard').classList.toggle('hidden',!lastAnalysis);
+      $('accordion').classList.toggle('hidden',!item.tailored_resume);
+      $('acc-tailored').classList.remove('hidden');
+      $('acc-tailored').classList.add('is-open');
+      $('acc-cover').classList.toggle('hidden',!item.cover_letter);
+      $('changesWrap').classList.toggle('hidden',!item.changes);
+      setTab('analyze');
+      setProgress(lastAnalysis?4:2);
+      markHasResults(!!lastAnalysis);
+      setTimeout(()=>$('scoreCard').scrollIntoView({behavior:'smooth',block:'start'}),100);
+    };
+  });
+}
+$('refreshHistoryBtn').onclick=()=>loadHistory();
+
+function titleFromCurrent(){
+  const role=$('role').value.trim(),company=$('company').value.trim();
+  if(role&&company) return `${role} at ${company}`;
+  if(role) return role;
+  if(company) return company;
+  const firstLine=($('resumeOut').textContent||resumeBox.value||'').split('\n').map(x=>x.trim()).find(Boolean);
+  return firstLine?`${firstLine} resume`:'Saved resume';
+}
+
+async function saveGeneration(){
+  if(!sb||!currentUser){showToast('Sign in to save resume history','error');return;}
+  const tailored=$('resumeOut').textContent.trim();
+  if(!tailored){showToast('Generate a resume before saving','error');return;}
+  const btn=$('saveGenerationBtn');btn.disabled=true;
+  $('approveStatus').textContent='Saving…';
+  const payload={
+    user_id:currentUser.id,
+    title:titleFromCurrent(),
+    company:$('company').value.trim(),
+    role:$('role').value.trim(),
+    source_resume:lastInputs?lastInputs.resume:resumeBox.value.trim(),
+    job_description:lastInputs?lastInputs.jd:$('jd').value.trim(),
+    tailored_resume:tailored,
+    cover_letter:$('coverOut').textContent.trim(),
+    changes:$('changesOut').textContent.trim(),
+    analysis:lastAnalysis,
+    comments:lastInputs?lastInputs.comments:$('comments').value.trim(),
+    mode:'tailor',
+    template_id:selectedTemplate,
+  };
+  const {error}=await sb.from('resume_generations').insert(payload);
+  if(error){$('approveStatus').textContent='Save failed.';showToast('Save failed — check Supabase setup','error');}
+  else{$('approveStatus').textContent='';showToast('Saved to your resume history ✓');await loadHistory();}
+  btn.disabled=false;
+}
+$('saveGenerationBtn').onclick=()=>saveGeneration();
+
+/* ── PDF export ─────────────────────────────────── */
+let exportTemplates=[], selectedTemplate='classic';
+const TEMPLATE_SWATCH={
+  classic:'linear-gradient(90deg,#1a3a5c 30%,#2d2d2d 30%)',
+  modern:'linear-gradient(90deg,#0f766e,#0d9488)',
+  technical:'repeating-linear-gradient(90deg,#334155 0 8px,#2d2d2d 8px 16px)',
+  academic:'linear-gradient(180deg,#7c2d12 28%,#2d2d2d 28%)',
+  executive:'linear-gradient(135deg,#4338ca 45%,#2d2d2d 45%)',
+};
 
 async function loadExportTemplates(){
-  const grid=$("templateGrid");
-  if(!grid) return;
+  const grid=$('templateGrid'); if(!grid) return;
   try{
-    const r=await fetch("/api/export/templates");
+    const r=await fetch('/api/export/templates');
     const data=await r.json();
     exportTemplates=data.templates||[];
   }catch(e){
     exportTemplates=[
-      {id:"classic",name:"Classic ATS",best_for:"General applications"},
-      {id:"modern",name:"Modern",best_for:"Product, data, business roles"},
-      {id:"technical",name:"Technical",best_for:"Engineering and AI roles"},
-      {id:"academic",name:"Academic",best_for:"Research and publications"},
-      {id:"executive",name:"Executive",best_for:"Senior roles"},
+      {id:'classic',name:'Classic ATS',best_for:'General applications'},
+      {id:'modern',name:'Modern',best_for:'Product, data, business'},
+      {id:'technical',name:'Technical',best_for:'Engineering roles'},
+      {id:'academic',name:'Academic',best_for:'Research & education'},
+      {id:'executive',name:'Executive',best_for:'Senior leadership'},
     ];
   }
   renderExportTemplates();
 }
 
 function renderExportTemplates(){
-  const grid=$("templateGrid");
-  if(!grid) return;
-  grid.innerHTML=exportTemplates.map(t=>`<div class="templatecard" data-template="${esc(t.id)}">
-    <div class="templatechip"></div>
-    <h3>${esc(t.name)}</h3>
-    <p>${esc(t.best_for)}</p>
-    <button class="ghost mini" data-template-download="${esc(t.id)}">Download PDF</button>
-  </div>`).join("");
-  grid.querySelectorAll("[data-template-download]").forEach(btn=>{
-    btn.onclick=()=>downloadPdf(btn.dataset.templateDownload);
+  const grid=$('templateGrid'); if(!grid) return;
+  grid.innerHTML=exportTemplates.map(t=>`<div class="flex flex-col gap-1.5 bg-[#1a1a1a] border border-[#2d2d2d] rounded-lg p-3 cursor-pointer hover:border-[#3d3d3d]" data-template="${esc(t.id)}">
+    <div class="h-7 rounded" style="background:${TEMPLATE_SWATCH[t.id]||'#2d2d2d'}"></div>
+    <div class="text-xs font-bold text-[#e0e0e0]">${esc(t.name)}</div>
+    <div class="text-[11px] text-[#999999]">${esc(t.best_for)}</div>
+    <button class="mt-1 text-[11px] font-semibold text-[#14b8a6] border border-[#14b8a6] rounded px-2 py-1" data-template-download="${esc(t.id)}">&#8595; PDF</button>
+  </div>`).join('');
+  grid.querySelectorAll('[data-template-download]').forEach(btn=>{
+    btn.onclick=(e)=>{e.stopPropagation();downloadPdf(btn.dataset.templateDownload);};
   });
 }
 
-function downloadTitle(){
-  return titleFromCurrent().replace(/\s+/g,"_").toLowerCase();
-}
-
 async function downloadPdf(templateId){
-  const resume=$("resumeOut").textContent.trim();
-  if(!resume){ $("exportStatus").textContent="Generate a resume before downloading."; return; }
-  selectedTemplate=templateId||"classic";
-  const status=$("exportStatus");
-  status.innerHTML='<span class="spinner"></span> Preparing PDF...';
+  const resume=$('resumeOut').textContent.trim();
+  if(!resume){showToast('Generate a resume before downloading','error');return;}
+  selectedTemplate=templateId||'classic';
+  const status=$('exportStatus');
+  status.textContent='Preparing PDF…';
   try{
-    const r=await fetch("/api/export/pdf",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({resume,template_id:selectedTemplate,title:downloadTitle()}),
+    const r=await fetch('/api/export/pdf',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({resume,template_id:selectedTemplate,title:titleFromCurrent().replace(/\s+/g,'_').toLowerCase()}),
     });
-    if(!r.ok){
-      let msg="PDF export failed.";
-      try{ const j=await r.json(); if(j.error) msg=j.error; }catch(e){}
-      throw new Error(msg);
-    }
+    if(!r.ok){let msg='PDF export failed.';try{const j=await r.json();if(j.error) msg=j.error;}catch(e){}throw new Error(msg);}
     const blob=await r.blob();
     const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    a.href=url;
-    a.download=`${downloadTitle()}_${selectedTemplate}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-    status.textContent="PDF downloaded.";
+    const a=document.createElement('a');
+    a.href=url;a.download=`${titleFromCurrent().replace(/\s+/g,'_').toLowerCase()}_${selectedTemplate}.pdf`;
+    document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    status.textContent='';
+    showToast(`PDF downloaded — ${selectedTemplate} template ✓`);
   }catch(e){
-    status.textContent=e.message||"PDF export failed.";
+    status.textContent=e.message||'PDF export failed.';
+    showToast(e.message||'PDF export failed','error');
   }
 }
 loadExportTemplates();
 
-function showAuthError(msg){
-  const el=$("authErr");
-  if(!el) return;
-  el.textContent=msg||"";
-  el.classList.toggle("hidden",!msg);
-}
-
-function titleFromCurrent(){
-  const role=$("role").value.trim(), company=$("company").value.trim();
-  if(role && company) return `${role} at ${company}`;
-  if(role) return role;
-  if(company) return company;
-  const firstLine=($("resumeOut").textContent||resumeBox.value||"").split("\n").map(x=>x.trim()).find(Boolean);
-  return firstLine ? `${firstLine} resume` : "Saved resume";
-}
-
-function setTab(tab){
-  const next=["tailor","results","saved","settings"].includes(tab) ? tab : "tailor";
-  document.body.dataset.tab=next;
-  document.querySelectorAll("[data-tab-target]").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.tabTarget===next);
-  });
-}
-setTab("tailor");
-document.querySelectorAll("[data-tab-target]").forEach(btn=>{
-  btn.onclick=()=>setTab(btn.dataset.tabTarget);
-});
-
-function setAuthUi(){
-  const configured=!!sb;
-  document.body.classList.toggle("signed-in",!!currentUser);
-  $("authForm").classList.toggle("hidden",!configured || !!currentUser);
-  $("logoutBtn").classList.toggle("hidden",!currentUser);
-  $("historyCard").classList.toggle("hidden",!currentUser);
-  if(!configured){
-    $("authStatus").textContent="Login is ready in the app, but Supabase env vars are not configured yet.";
-  }else if(currentUser){
-    $("authStatus").textContent=`Signed in as ${currentUser.email}`;
-    $("signedInPill").textContent=currentUser.email||"Signed in";
-  }else{
-    $("authStatus").textContent="Sign in to save resume generations and revisit them later.";
+/* ── Animated score counter ─────────────────────── */
+function animateScore(target){
+  const numEl=$('scoreNumber');
+  const fill=$('ringFill');
+  const circumference=283;
+  let start=null,from=0;
+  function step(ts){
+    if(!start) start=ts;
+    const progress=Math.min((ts-start)/900,1);
+    const ease=1-Math.pow(1-progress,3);
+    const current=Math.round(from+(target-from)*ease);
+    numEl.textContent=current;
+    const offset=circumference-(circumference*current/100);
+    fill.style.strokeDashoffset=offset;
+    if(progress<1) requestAnimationFrame(step);
+    else{numEl.textContent=target;fill.style.strokeDashoffset=circumference-(circumference*target/100);}
   }
+  requestAnimationFrame(step);
 }
 
-async function initSupabase(){
-  try{
-    const r=await fetch("/api/supabase/config");
-    const cfg=await r.json();
-    if(!cfg.configured || !window.supabase){ setAuthUi(); return; }
-    sb=window.supabase.createClient(cfg.url,cfg.anon_key);
-    const {data}=await sb.auth.getUser();
-    currentUser=data.user||null;
-    setAuthUi();
-    if(currentUser) await loadHistory();
-    sb.auth.onAuthStateChange(async (_event,session)=>{
-      currentUser=session && session.user ? session.user : null;
-      showAuthError("");
-      setAuthUi();
-      if(currentUser){ setTab("tailor"); await loadHistory(); }
-      else { $("historyList").innerHTML=""; setTab("tailor"); }
-    });
-  }catch(e){
-    $("authStatus").textContent="Login could not be initialized.";
-  }
-}
-
-async function authWithPassword(mode){
-  if(!sb) return;
-  const email=$("authEmail").value.trim(), password=$("authPassword").value;
-  if(!email || !password){ showAuthError("Enter email and password."); return; }
-  showAuthError("");
-  const btn=mode==="signup" ? $("signupBtn") : $("loginBtn");
-  btn.disabled=true;
-  try{
-    const res=mode==="signup"
-      ? await sb.auth.signUp({email,password})
-      : await sb.auth.signInWithPassword({email,password});
-    if(res.error) throw res.error;
-    if(mode==="signup" && !res.data.session) $("authStatus").textContent="Account created. Check your email if confirmation is enabled.";
-  }catch(e){ showAuthError(e.message||"Authentication failed."); }
-  finally{ btn.disabled=false; }
-}
-
-async function loginWithGoogle(){
-  if(!sb) return;
-  showAuthError("");
-  const btn=$("googleLoginBtn");
-  btn.disabled=true;
-  try{
-    const {error}=await sb.auth.signInWithOAuth({
-      provider:"google",
-      options:{redirectTo:window.location.origin}
-    });
-    if(error) throw error;
-  }catch(e){
-    showAuthError(e.message||"Google login failed.");
-    btn.disabled=false;
-  }
-}
-
-async function loadHistory(){
-  if(!sb || !currentUser) return;
-  const status=$("historyStatus"), list=$("historyList");
-  status.innerHTML='<span class="spinner"></span> Loading saved resumes...';
-  const {data,error}=await sb.from("resume_generations")
-    .select("id,title,company,role,created_at,source_resume,job_description,tailored_resume,cover_letter,changes,analysis,comments,template_id")
-    .order("created_at",{ascending:false})
-    .limit(20);
-  if(error){ status.textContent="Could not load saved resumes. Check that the Supabase SQL schema has been applied."; return; }
-  if(!data || !data.length){ status.textContent="No saved resumes yet."; list.innerHTML=""; return; }
-  status.textContent=`${data.length} saved resume${data.length===1?"":"s"}.`;
-  list.innerHTML=data.map(item=>{
-    const when=item.created_at ? new Date(item.created_at).toLocaleString() : "";
-    const subtitle=[item.role,item.company].filter(Boolean).join(" · ");
-    return `<div class="historyitem">
-      <div><b>${esc(item.title||"Saved resume")}</b><div class="historymeta">${esc(subtitle||when)}${subtitle&&when?" · "+esc(when):""}</div></div>
-      <div class="btnrow" style="margin-top:0"><button class="ghost mini" data-load-id="${esc(item.id)}">Open</button></div>
-    </div>`;
-  }).join("");
-  list.querySelectorAll("[data-load-id]").forEach(btn=>{
-    btn.onclick=()=>{
-      const item=data.find(x=>x.id===btn.dataset.loadId);
-      if(!item) return;
-      resumeBox.value=item.source_resume||"";
-      $("jd").value=item.job_description||"";
-      $("company").value=item.company||"";
-      $("role").value=item.role||"";
-      $("comments").value=item.comments||"";
-      $("resumeOut").textContent=item.tailored_resume||"";
-      $("coverOut").textContent=item.cover_letter||"";
-      $("changesOut").textContent=item.changes||"";
-      selectedTemplate=item.template_id||"classic";
-      lastInputs={jd:item.job_description||"",resume:item.source_resume||"",comments:item.comments||""};
-      lastAnalysis=item.analysis||null;
-      if(lastAnalysis) renderSkills(lastAnalysis);
-      $("resumeCard").classList.toggle("hidden",!item.tailored_resume);
-      $("exportCard").classList.toggle("hidden",!item.tailored_resume);
-      $("coverCard").classList.toggle("hidden",!item.cover_letter);
-      $("changesWrap").classList.toggle("hidden",!item.changes);
-      setTab("results");
-      window.scrollTo({top:$("resumeCard").offsetTop-12,behavior:"smooth"});
-    };
-  });
-}
-
-async function saveGeneration(){
-  if(!sb || !currentUser){ $("approveStatus").textContent="Sign in first to save this resume."; return; }
-  const tailored=$("resumeOut").textContent.trim();
-  if(!tailored){ $("approveStatus").textContent="Generate a resume before saving."; return; }
-  const btn=$("saveGenerationBtn"); btn.disabled=true;
-  $("approveStatus").innerHTML='<span class="spinner"></span> Saving...';
-  const payload={
-    user_id: currentUser.id,
-    title: titleFromCurrent(),
-    company: $("company").value.trim(),
-    role: $("role").value.trim(),
-    source_resume: lastInputs ? lastInputs.resume : resumeBox.value.trim(),
-    job_description: lastInputs ? lastInputs.jd : $("jd").value.trim(),
-    tailored_resume: tailored,
-    cover_letter: $("coverOut").textContent.trim(),
-    changes: $("changesOut").textContent.trim(),
-    analysis: lastAnalysis,
-    comments: lastInputs ? lastInputs.comments : $("comments").value.trim(),
-    mode: "tailor",
-    template_id: selectedTemplate,
-  };
-  const {error}=await sb.from("resume_generations").insert(payload);
-  if(error) $("approveStatus").textContent="Save failed. Check Supabase table/RLS setup.";
-  else { $("approveStatus").textContent="Saved to your resume history."; await loadHistory(); }
-  btn.disabled=false;
-}
-
-$("loginBtn").onclick=()=>authWithPassword("login");
-$("signupBtn").onclick=()=>authWithPassword("signup");
-$("googleLoginBtn").onclick=()=>loginWithGoogle();
-$("logoutBtn").onclick=async()=>{ if(sb) await sb.auth.signOut(); };
-$("refreshHistoryBtn").onclick=()=>loadHistory();
-$("saveGenerationBtn").onclick=()=>saveGeneration();
-initSupabase();
-
-function renderSkills(a){
-  lastAnalysis=a;
-  const score=Math.max(0,Math.min(100,a.score||0));
-  $("scoreBig").textContent=score+"%";
-  $("fill").style.width=score+"%";
-  const req=(a.required||[]).length, m=(a.matched||[]).length;
-  $("meterSub").textContent=`${m} of ${req} key requirements clearly matched`+((a.partial&&a.partial.length)?`, ${a.partial.length} partial`:"")+".";
-  const fill=(id,arr,cls)=>{ const el=$(id); el.innerHTML=(arr&&arr.length)?arr.map(s=>`<span class="chip ${cls}">${esc(s)}</span>`).join(""):'<span class="hint">—</span>'; };
-  fill("matchChips",a.matched,"c-match");
-  fill("partialChips",a.partial,"c-partial");
-  fill("missChips",a.missing,"c-miss");
-  $("partialGroup").style.display=(a.partial&&a.partial.length)?"":"none";
-  const g=$("gainList");
-  if(a.to_gain&&a.to_gain.length){ g.innerHTML=a.to_gain.map(x=>`<div class="gain"><b>${esc(x.skill)}</b> — ${esc(x.how)}</div>`).join(""); $("gainGroup").style.display=""; }
-  else { g.innerHTML=''; $("gainGroup").style.display="none"; }
-  $("skillCard").classList.remove("hidden");
-}
-
+/* ── Render analysis ────────────────────────────── */
 let lastInputs=null, lastAnalysis=null;
 
-async function runGenerate(extraNotes){
-  const jd=$("jd").value.trim(), resume=resumeBox.value.trim();
-  let comments=$("comments").value.trim();
-  if(extraNotes) comments=(comments?comments+"\n":"")+extraNotes;
-  $("err").classList.add("hidden");
-  if(!jd){ $("err").textContent="Paste a job description first."; $("err").classList.remove("hidden"); return; }
-  lastInputs={jd,resume,comments};
-  lastAnalysis=null;
-  const btn=$("goBtn"); btn.disabled=true; const status=$("status");
-  ["skillCard","resumeCard","exportCard","coverCard","changesWrap","reviseWrap"].forEach(i=>$(i).classList.add("hidden"));
-  $("approveStatus").textContent="";
-  $("exportStatus").textContent="";
-  try{
-    status.innerHTML='<span class="spinner"></span> Analyzing skill fit…';
-    try{ const a=await api("/api/analyze",{jd,resume}); if(!a.error) renderSkills(a); }catch(e){}
+function renderAnalysis(a){
+  lastAnalysis=a;
+  const score=Math.max(0,Math.min(100,a.fit_score||a.score||0));
+  $('scoreCard').classList.remove('hidden');
+  animateScore(score);
 
-    status.innerHTML='<span class="spinner"></span> Tailoring résumé…';
-    const t=await api("/api/tailor",{jd,resume,comments});
-    $("resumeOut").textContent=t.resume; $("resumeCard").classList.remove("hidden"); $("exportCard").classList.remove("hidden");
-    if(t.changes){ $("changesOut").textContent=t.changes; $("changesWrap").classList.remove("hidden"); }
-    setTab("results");
-    status.textContent="Review below ↓";
-  }catch(e){ $("err").textContent="Something went wrong ("+e.message+"). Is the server running, and is OPENAI_API_KEY configured on the server?"; $("err").classList.remove("hidden"); status.textContent=""; }
-  finally{ btn.disabled=false; }
+  let ringColor='#14b8a6';
+  if(score>=80) ringColor='#22c55e';
+  else if(score>=60) ringColor='#14b8a6';
+  else if(score>=40) ringColor='#f59e0b';
+  else ringColor='#ef4444';
+  $('ringFill').setAttribute('stroke',ringColor);
+  $('scoreNumber').style.color=ringColor;
+
+  const badge=$('scoreBadge'),desc=$('scoreDesc'),tag=$('scoreTag');
+  const badgeBase='inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide rounded-full px-3 py-1';
+  if(score>=80){
+    badge.innerHTML=`<span class="${badgeBase}" style="background:#22c55e1a;color:#22c55e;border:1px solid #22c55e40">&#10022; Excellent fit</span>`;
+    desc.textContent='Strong shortlisting odds. Your profile closely matches what this JD is looking for.';
+    tag.textContent='Excellent';tag.style.color='#22c55e';
+  }else if(score>=66){
+    badge.innerHTML=`<span class="${badgeBase}" style="background:#14b8a61a;color:#14b8a6;border:1px solid #14b8a640">&#9670; Strong fit</span>`;
+    desc.textContent='Good match. A few targeted gaps to close, but you are a competitive candidate.';
+    tag.textContent='Strong';tag.style.color='#14b8a6';
+  }else if(score>=41){
+    badge.innerHTML=`<span class="${badgeBase}" style="background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b40">&#9671; Moderate fit</span>`;
+    desc.textContent='Partial alignment. Address the gaps below to significantly improve your shortlisting odds.';
+    tag.textContent='Moderate';tag.style.color='#f59e0b';
+  }else{
+    badge.innerHTML=`<span class="${badgeBase}" style="background:#9999991a;color:#999999;border:1px solid #99999940">&#9675; Weak fit</span>`;
+    desc.textContent='Low alignment. Consider whether this role matches your current profile before applying.';
+    tag.textContent='Weak';tag.style.color='#999999';
+  }
+
+  const req=(a.required||[]).length||1;
+  const matched=(a.matched||[]).length;
+  const matchPct=Math.round(matched/req*100);
+  $('matchTrack').style.width=matchPct+'%';
+  $('matchLabel').textContent=matched+'/'+req+' matched';
+
+  const chipStyle=(kind)=>{
+    if(kind==='match') return 'background:#22c55e1a;color:#22c55e;border:1px solid #22c55e40';
+    if(kind==='partial') return 'background:#6366f11f;color:#a5b4fc;border:1px solid #6366f133';
+    return 'background:#f59e0b1a;color:#f59e0b;border:1px solid #f59e0b40';
+  };
+  const fillChips=(id,arr,kind)=>{
+    const el=$(id);
+    el.innerHTML=(arr&&arr.length)?arr.map(s=>`<span class="text-[11.5px] font-semibold rounded-full px-2.5 py-1" style="${chipStyle(kind)}">${esc(s)}</span>`).join(''):'<span class="text-xs text-[#666666]">—</span>';
+  };
+  fillChips('matchChips',a.matched,'match');
+  fillChips('partialChips',a.partial,'partial');
+  fillChips('missChips',a.missing,'miss');
+  $('partialGroup').style.display=(a.partial&&a.partial.length)?'':'none';
+  $('missGroup').style.display=(a.missing&&a.missing.length)?'':'none';
+
+  $('accordion').classList.remove('hidden');
+
+  const gaps=a.gaps||[];
+  $('gapCount').textContent=gaps.length;
+  const impColor=imp=>imp==='critical'?'#ef4444':imp==='high'?'#f59e0b':'#999999';
+  $('gapList').innerHTML=gaps.map(g=>`
+    <div class="flex w-full flex-col bg-[#1a1a1a] rounded-lg px-3.5 py-3 gap-1 border-l-[3px]" style="border-left-color:${impColor(g.importance)}">
+      <div class="flex items-center gap-2">
+        <div class="text-[#e0e0e0] text-sm font-bold">${esc(g.skill)}</div>
+        <div class="text-[10px] font-bold uppercase rounded-full px-2 py-0.5" style="background:${impColor(g.importance)}33;color:${impColor(g.importance)}">${esc(g.importance||'medium')}</div>
+      </div>
+      <div class="text-xs text-[#999999]">${esc(g.why)}</div>
+    </div>`).join('');
+
+  const bullets=a.rewritten_bullets||[];
+  $('bulletCount').textContent=bullets.length;
+  $('bulletList').innerHTML=bullets.map(b=>`
+    <div class="flex w-full flex-col bg-[#1a1a1a] rounded-lg p-3.5 gap-1.5 border-l-[3px] border-l-[#14b8a6]">
+      <div class="text-[11px] font-semibold uppercase tracking-wide text-[#999999]">Original</div>
+      <div class="text-xs text-[#999999] line-through">${esc(b.original)}</div>
+      <div class="text-[11px] font-semibold uppercase tracking-wide text-[#999999] mt-1">Rewritten for this JD</div>
+      <div class="text-sm font-semibold text-[#e0e0e0]">${esc(b.rewritten)}</div>
+      ${b.keywords_matched&&b.keywords_matched.length?`<div class="flex flex-wrap gap-1 mt-1">${b.keywords_matched.map(k=>`<span class="text-[10.5px] font-semibold text-[#14b8a6] bg-[#14b8a61a] border border-[#14b8a633] rounded-full px-2 py-0.5">${esc(k)}</span>`).join('')}</div>`:''}
+    </div>`).join('');
+
+  const highlights=a.highlights||[];
+  $('highlightCount').textContent=highlights.length;
+  $('highlightList').innerHTML=highlights.map(h=>`
+    <div class="flex items-start gap-2 text-sm text-[#e0e0e0]">
+      <svg class="size-4 shrink-0 mt-0.5 text-[#14b8a6]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>${esc(h)}</span>
+    </div>`).join('');
+
+  $('acc-gaps').classList.add('is-open');
+  markHasResults(true);
 }
 
-$("goBtn").onclick=()=>runGenerate(null);
-$("reviseBtn").onclick=()=>$("reviseWrap").classList.toggle("hidden");
-$("regenBtn").onclick=()=>{ const n=$("revise").value.trim(); $("revise").value=""; runGenerate(n||null); };
+/* ── Main generate flow ─────────────────────────── */
+async function runGenerate(extraNotes){
+  const jd=$('jd').value.trim(), resume=resumeBox.value.trim();
+  let comments=$('comments').value.trim();
+  if(extraNotes) comments=(comments?comments+'\n':'')+extraNotes;
+  $('err').classList.add('hidden');
+  if(!jd){
+    $('errMsg').textContent='Paste a job description first.';
+    $('err').classList.remove('hidden');return;
+  }
+  lastInputs={jd,resume,comments};
+  lastAnalysis=null;
+  const btn=$('goBtn');btn.disabled=true;
+  const status=$('status');
 
-$("approveBtn").onclick=async()=>{
-  $("reviseWrap").classList.add("hidden");
-  if(!$("wantCover").checked){ $("approveStatus").textContent='Approved ✓ — résumé ready to use.'; return; }
-  const btn=$("approveBtn"); btn.disabled=true;
-  $("approveStatus").innerHTML='<span class="spinner"></span> Writing cover letter…';
+  $('emptyState').classList.add('hidden');
+  $('resultsErrorState').classList.add('hidden');
+  $('scoreCard').classList.add('hidden');
+  $('accordion').classList.add('hidden');
+  $('loadingState').classList.remove('hidden');
+  setProgress(3);
+  ['acc-gaps','acc-bullets','acc-highlights','acc-tailored','acc-cover'].forEach(id=>{
+    $(id).classList.remove('is-open');
+  });
+  $('resumeOut').textContent='';
+  $('coverOut').textContent='';
+  $('changesOut').textContent='';
+  $('changesWrap').classList.add('hidden');
+  $('reviseWrap').classList.add('hidden');
+  $('acc-cover').classList.add('hidden');
+  $('approveStatus').textContent='';
+  $('exportStatus').textContent='';
+
   try{
-    const resume=$("resumeOut").textContent||lastInputs.resume;
-    const company=$("company").value.trim(), role=$("role").value.trim();
-    const c=await api("/api/cover",{jd:lastInputs.jd,resume,company,role,comments:lastInputs.comments});
-    $("coverOut").textContent=c.letter; $("coverCard").classList.remove("hidden");
-    $("approveStatus").textContent="Approved ✓ — cover letter below.";
-  }catch(e){ $("approveStatus").textContent="Approved, but cover letter failed ("+e.message+")."; }
-  finally{ btn.disabled=false; }
+    status.textContent='Analyzing fit…';
+    try{
+      const a=await api('/api/analyze',{jd,resume});
+      if(!a.error) renderAnalysis(a);
+    }catch(e){
+      if(e.upgradeRequired){
+        $('loadingState').classList.add('hidden');
+        $('emptyState').classList.remove('hidden');
+        showToast(e.message,'error');
+        setProgress(2);
+        setView('upgrade');
+        btn.disabled=false;
+        status.textContent='';
+        return;
+      }
+      /* analysis failed for a non-quota reason — continue to tailor, matching prior behavior */
+    }
+
+    status.textContent='Tailoring résumé…';
+    const t=await api('/api/tailor',{jd,resume,comments});
+    $('loadingState').classList.add('hidden');
+    $('resumeOut').textContent=t.resume;
+    if(t.changes){$('changesOut').textContent=t.changes;$('changesWrap').classList.remove('hidden');}
+    $('acc-tailored').classList.remove('hidden');
+    $('acc-tailored').classList.add('is-open');
+    $('accordion').classList.remove('hidden');
+    status.textContent='';
+    setProgress(4);
+    showToast('Analysis complete ✓');
+    setTimeout(()=>$('scoreCard').scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }catch(e){
+    $('loadingState').classList.add('hidden');
+    if(e.upgradeRequired){
+      $('emptyState').classList.remove('hidden');
+      showToast(e.message,'error');
+      setView('upgrade');
+    }else{
+      $('resultsErrorMsg').textContent='Something went wrong ('+e.message+'). Is the server running and OPENAI_API_KEY configured?';
+      $('resultsErrorState').classList.remove('hidden');
+    }
+    setProgress(2);
+    status.textContent='';
+  }finally{btn.disabled=false;}
+}
+
+$('goBtn').onclick=()=>runGenerate(null);
+$('reviseBtn').onclick=()=>$('reviseWrap').classList.toggle('hidden');
+$('regenBtn').onclick=()=>{
+  const n=$('revise').value.trim();
+  $('revise').value='';
+  runGenerate(n||null);
+};
+$('errorRetryBtn').onclick=()=>runGenerate(null);
+$('exportShortcutBtn').onclick=()=>{
+  $('acc-tailored').classList.remove('hidden');
+  $('acc-tailored').classList.add('is-open');
+  $('acc-tailored').scrollIntoView({behavior:'smooth',block:'start'});
+};
+$('mobileCopyApplyBtn').onclick=()=>{
+  const t=$('resumeOut').textContent;
+  if(!t){showToast('Generate a resume first','error');return;}
+  navigator.clipboard.writeText(t).then(()=>showToast('Copied — ready to paste into your application ✓'));
+};
+
+$('approveBtn').onclick=async()=>{
+  $('reviseWrap').classList.add('hidden');
+  if(!$('wantCover').checked){showToast('Résumé approved ✓ — ready to export');return;}
+  const btn=$('approveBtn');btn.disabled=true;
+  $('approveStatus').textContent='Writing cover letter…';
+  try{
+    const resume=$('resumeOut').textContent||lastInputs.resume;
+    const company=$('company').value.trim(),role=$('role').value.trim();
+    const c=await api('/api/cover',{jd:lastInputs.jd,resume,company,role,comments:lastInputs.comments});
+    $('coverOut').textContent=c.letter;
+    $('acc-cover').classList.remove('hidden');
+    $('acc-cover').classList.add('is-open');
+    $('approveStatus').textContent='';
+    showToast('Cover letter generated ✓');
+    setTimeout(()=>$('acc-cover').scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }catch(e){
+    $('approveStatus').textContent='';
+    showToast('Cover letter failed: '+e.message,'error');
+  }finally{btn.disabled=false;}
 };
 </script>
 </body>
